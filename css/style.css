@@ -3043,7 +3043,7 @@ main section > .container > * {
   font-weight: 500;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--gray-500);
+  color: rgba(255, 255, 255, 0.75);
   margin-bottom: 14px;
   position: relative;
   z-index: 1;
@@ -3054,7 +3054,7 @@ main section > .container > * {
   font-size: clamp(2rem, 8vw, 3.6rem);
   font-weight: 400;
   font-style: italic;
-  color: var(--gray-950);
+  color: #ffffff;
   letter-spacing: -0.02em;
   line-height: 1.1;
   margin-bottom: 10px;
@@ -3069,7 +3069,7 @@ main section > .container > * {
   display: inline-block;
   font-size: 0.55em;
   font-style: italic;
-  color: var(--gray-500);
+  color: rgba(255, 255, 255, 0.55);
   margin: 0 0.06em;
   vertical-align: 0.05em;
 }
@@ -3090,7 +3090,7 @@ main section > .container > * {
 .cover__date {
   font-size: 0.78rem;
   font-weight: 400;
-  color: var(--gray-800);
+  color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.12em;
   margin-top: 2px;
   position: relative;
@@ -3127,7 +3127,7 @@ main section > .container > * {
 
 .cover__guest-label {
   font-size: 0.75rem;
-  color: var(--gray-600);
+  color: rgba(255, 255, 255, 0.60);
   font-weight: 400;
   margin-bottom: 4px;
   letter-spacing: 0.04em;
@@ -3135,7 +3135,7 @@ main section > .container > * {
 
 .cover__guest-name {
   font-size: 1.05rem;
-  color: var(--gray-950);
+  color: #ffffff;
   font-weight: 600;
   letter-spacing: 0.01em;
 }
