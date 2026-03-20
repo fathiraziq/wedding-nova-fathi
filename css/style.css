@@ -2338,7 +2338,7 @@ main section > .container > * {
   position: fixed;
   top: max(20px, env(safe-area-inset-top, 20px));
   right: 20px;
-  z-index: 1001;
+  z-index: 2001;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -2392,7 +2392,7 @@ main section > .container > * {
   position: fixed;
   top: max(20px, env(safe-area-inset-top, 20px));
   right: 72px;
-  z-index: 1001;
+  z-index: 2001;
   width: 44px;
   height: 44px;
   border-radius: 50%;
