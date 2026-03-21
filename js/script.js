@@ -796,42 +796,9 @@
     closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
     overlay.appendChild(closeBtn);
 
-    // Prev/Next buttons
-    var prevBtn = document.createElement('button');
-    prevBtn.className = 'lightbox-nav lightbox-nav--prev';
-    prevBtn.setAttribute('aria-label', 'Foto sebelumnya');
-    prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>';
-    overlay.appendChild(prevBtn);
-
-    var nextBtn = document.createElement('button');
-    nextBtn.className = 'lightbox-nav lightbox-nav--next';
-    nextBtn.setAttribute('aria-label', 'Foto berikutnya');
-    nextBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>';
-    overlay.appendChild(nextBtn);
-
-    // Counter
-    var counter = document.createElement('span');
-    counter.className = 'lightbox-counter';
-    overlay.appendChild(counter);
-
-    var currentIndex = 0;
-    var galleryImages = Array.from(items).map(function(item) {
-      var photo = item.querySelector('img');
-      return photo ? photo.src : '';
-    }).filter(Boolean);
-
-    function updateNav() {
-      prevBtn.disabled = currentIndex <= 0;
-      nextBtn.disabled = currentIndex >= galleryImages.length - 1;
-      counter.textContent = (currentIndex + 1) + ' / ' + galleryImages.length;
-    }
-
     function openLightbox(src) {
       if (!src) return;
-      currentIndex = galleryImages.indexOf(src);
-      if (currentIndex < 0) currentIndex = 0;
       img.src = src;
-      updateNav();
       overlay.classList.add('lightbox-overlay--show');
       document.body.style.overflow = 'hidden';
     }
@@ -839,22 +806,6 @@
     function closeLightbox() {
       overlay.classList.remove('lightbox-overlay--show');
       document.body.style.overflow = '';
-    }
-
-    function showPrev() {
-      if (currentIndex > 0) {
-        currentIndex--;
-        img.src = galleryImages[currentIndex];
-        updateNav();
-      }
-    }
-
-    function showNext() {
-      if (currentIndex < galleryImages.length - 1) {
-        currentIndex++;
-        img.src = galleryImages[currentIndex];
-        updateNav();
-      }
     }
 
     items.forEach(function(item) {
@@ -865,17 +816,11 @@
     });
 
     closeBtn.addEventListener('click', closeLightbox);
-    prevBtn.addEventListener('click', showPrev);
-    nextBtn.addEventListener('click', showNext);
     overlay.addEventListener('click', function(e) {
       if (e.target === overlay) closeLightbox();
     });
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeLightbox();
-      if (overlay.classList.contains('lightbox-overlay--show')) {
-        if (e.key === 'ArrowLeft') showPrev();
-        if (e.key === 'ArrowRight') showNext();
-      }
     });
   })();
 
