@@ -83,6 +83,9 @@ html {
   --blur-primary: blur(48px) saturate(1.8) brightness(1.1);
   --blur-secondary: blur(36px) saturate(1.6) brightness(1.05);
   --blur-tertiary: blur(24px) saturate(1.4) brightness(1.02);
+  /* Performance — orb blur (overridden on mobile) */
+  --orb-blur: 50px;
+  --cover-orb-blur: 60px;
   /* iOS 26 — 4-tier radius scale (Squircles - larger for liquid feel) */
   --radius-container: 36px;
   --radius-card: 28px;
@@ -138,8 +141,8 @@ html {
 [data-theme="dark"] body {
   background: #000000;
   background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(180, 180, 184, 0.04) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 85%, rgba(160, 160, 164, 0.03) 0%, transparent 45%);
+    radial-gradient(ellipse at 30% 20%, rgba(180, 180, 184, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 75%, rgba(160, 160, 164, 0.03) 0%, transparent 60%);
 }
 
 /* ── Cover ── */
@@ -372,15 +375,11 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  background: #ece6df;
+  background: #ede8e3;
   background-image:
-    radial-gradient(ellipse at 20% 15%, rgba(220, 175, 135, 0.60) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 80%, rgba(140, 165, 210, 0.55) 0%, transparent 55%),
-    radial-gradient(ellipse at 55% 45%, rgba(205, 175, 195, 0.45) 0%, transparent 60%),
-    radial-gradient(ellipse at 10% 70%, rgba(155, 185, 165, 0.35) 0%, transparent 45%);
+    radial-gradient(ellipse at 30% 20%, rgba(210, 190, 170, 0.40) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 75%, rgba(190, 180, 200, 0.30) 0%, transparent 60%);
   background-attachment: fixed;
-  background-size: 150% 150%;
-  animation: bgMeshBreathe 28s ease-in-out infinite alternate;
   color: var(--gray-900);
   line-height: 1.6;
   overflow-x: hidden;
@@ -388,12 +387,6 @@ body {
   -webkit-overflow-scrolling: touch;
   padding-top: env(safe-area-inset-top);
   padding-bottom: 100px;
-}
-
-@keyframes bgMeshBreathe {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 100%; }
 }
 
 /* ── Typography System ── */
@@ -404,7 +397,6 @@ body {
   font-style: italic;
   line-height: 1.15;
   letter-spacing: -0.04em; /* Native iOS tight tracking for hierarchy */
-  will-change: transform;
   transition: transform 0.1s ease-out;
 }
 
@@ -427,6 +419,8 @@ section {
   padding: 10px 0;
   position: relative;
   contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
 }
 
 /* ── Unified mesh gradient for liquid glass — flows across entire page ── */
@@ -439,23 +433,16 @@ main::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 90% 50% at 80% 5%, rgba(210, 175, 140, 0.55) 0%, transparent 100%),
-    radial-gradient(ellipse 75% 55% at 10% 45%, rgba(155, 170, 205, 0.50) 0%, transparent 100%),
-    radial-gradient(ellipse 70% 40% at 85% 85%, rgba(195, 165, 185, 0.45) 0%, transparent 100%),
-    radial-gradient(ellipse 60% 35% at 35% 25%, rgba(215, 198, 175, 0.40) 0%, transparent 100%),
-    radial-gradient(ellipse 50% 30% at 60% 65%, rgba(175, 185, 200, 0.35) 0%, transparent 100%);
+    radial-gradient(ellipse 80% 50% at 50% 30%, rgba(210, 195, 178, 0.30) 0%, transparent 100%),
+    radial-gradient(ellipse 70% 45% at 50% 70%, rgba(185, 180, 195, 0.22) 0%, transparent 100%);
   pointer-events: none;
   z-index: 0;
 }
 
 [data-theme="dark"] main::before {
   background:
-    radial-gradient(ellipse 80% 45% at 75% 8%, rgba(100, 70, 130, 0.28) 0%, transparent 100%),
-    radial-gradient(ellipse 70% 50% at 10% 50%, rgba(50, 80, 130, 0.25) 0%, transparent 100%),
-    radial-gradient(ellipse 65% 40% at 85% 80%, rgba(120, 60, 80, 0.22) 0%, transparent 100%),
-    radial-gradient(ellipse 50% 35% at 45% 30%, rgba(60, 90, 100, 0.18) 0%, transparent 100%);
-  background-size: 150% 150%;
-  animation: bgMeshBreathe 32s ease-in-out infinite alternate-reverse;
+    radial-gradient(ellipse 80% 50% at 50% 30%, rgba(160, 160, 165, 0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 70% 45% at 50% 70%, rgba(140, 140, 145, 0.04) 0%, transparent 100%);
 }
 
 main > section {
@@ -466,7 +453,7 @@ main > section {
 /* ── App-like Section Panels — iOS 26 Liquid Glass ── */
 main section > .container {
   background: var(--glass-bg);
-  border: 0.5px solid var(--glass-border);
+  border: 1px solid var(--glass-border);
   backdrop-filter: var(--blur-primary);
   -webkit-backdrop-filter: var(--blur-primary);
   border-radius: var(--radius-container);
@@ -542,8 +529,7 @@ main section > .container > * {
 .parallax-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(50px);
-  will-change: transform;
+  filter: blur(var(--orb-blur));
   opacity: 0.55;
   contain: strict;
 }
@@ -611,7 +597,8 @@ main section > .container > * {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  border: 0.5px solid var(--glass-border);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-card);
   box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
@@ -624,7 +611,8 @@ main section > .container > * {
 }
 
 .hero__card:active {
-  animation: liquidPress 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 .hero__card-photo {
@@ -745,11 +733,6 @@ main section > .container > * {
   filter: blur(0);
 }
 
-/* — Ornament frame: hidden for app-like feel — */
-.opening-frame {
-  display: none;
-}
-
 /* — Stagger for Opening — */
 .reveal-open-1 { transition-delay: 0.05s; }
 .reveal-open-2 { transition-delay: 0.15s; }
@@ -773,12 +756,6 @@ main section > .container > * {
 }
 
 
-
-/* — Photo card parallax tilt — */
-.tilt-card {
-  transition: transform 0.2s ease-out;
-  will-change: transform;
-}
 
 /* ── Countdown (Live Activity floating pill) ── */
 .live-activity {
@@ -817,7 +794,8 @@ main section > .container > * {
 }
 
 .live-activity__inner:active {
-  animation: liquidPress 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 .live-activity__left {
@@ -878,7 +856,8 @@ main section > .container > * {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  border: 0.5px solid var(--glass-border);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-card);
   box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
@@ -891,7 +870,8 @@ main section > .container > * {
 }
 
 .couple-card:active {
-  animation: liquidPress 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 /* Full portrait photo background */
@@ -1017,8 +997,8 @@ main section > .container > * {
 
 /* ── Unified Event Card ── */
 .event-card {
-  background: var(--glass-bg-thin);
-  border: 0.5px solid var(--glass-border);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   backdrop-filter: var(--blur-secondary);
   -webkit-backdrop-filter: var(--blur-secondary);
   border-radius: var(--radius-card);
@@ -1110,7 +1090,8 @@ main section > .container > * {
 }
 
 .event-card__event:active {
-  animation: liquidPress 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
   background: rgba(0, 0, 0, 0.02);
 }
 
@@ -1278,7 +1259,8 @@ main section > .container > * {
 }
 
 .map-action-pill:active {
-  animation: liquidPress 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
   background: var(--gold-subtle);
 }
 
@@ -1352,8 +1334,8 @@ main section > .container > * {
 .gallery__item {
   flex: 0 0 72%;
   aspect-ratio: 3 / 4;
-  background: var(--glass-bg-thin);
-  border: 0.5px solid var(--glass-border);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   backdrop-filter: var(--blur-secondary);
   -webkit-backdrop-filter: var(--blur-secondary);
   border-radius: var(--radius-card);
@@ -1388,7 +1370,8 @@ main section > .container > * {
 }
 
 .gallery__item:active {
-  animation: liquidPress 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 .gallery__item-label {
@@ -1440,23 +1423,19 @@ main section > .container > * {
 
 /* Grouped Card — iOS Settings inset table */
 .rsvp__grouped-card {
-  background: rgba(255, 255, 255, 0.38);
-  border: 0.5px solid rgba(255, 255, 255, 0.55);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-element);
   overflow: hidden;
-  box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.70),
-    0 2px 12px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(24px) saturate(1.5);
-  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
+  backdrop-filter: var(--blur-secondary);
+  -webkit-backdrop-filter: var(--blur-secondary);
 }
 
 [data-theme="dark"] .rsvp__grouped-card {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.10);
-  box-shadow: 
-    inset 0 0.5px 0 rgba(255,255,255,0.10),
-    0 2px 16px rgba(0, 0, 0, 0.25);
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 /* Row — label left, input right */
@@ -1658,7 +1637,8 @@ main section > .container > * {
 }
 
 .rsvp__segment-btn:active {
-  animation: liquidPressCircle 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.90);
+  transition: transform 0.1s ease;
 }
 
 .rsvp__segment-btn.active {
@@ -1842,7 +1822,8 @@ main section > .container > * {
 }
 
 .rsvp__success-btn:active {
-  animation: liquidPress 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 @keyframes successReveal {
@@ -1982,7 +1963,8 @@ main section > .container > * {
 }
 
 .wishes__more:active {
-  animation: liquidPress 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 /* ══════════════════════════════════════
@@ -1999,20 +1981,15 @@ main section > .container > * {
 }
 
 .gift-card {
-  background: rgba(255, 255, 255, 0.32);
-  border: 0.5px solid rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(44px) saturate(2.0) brightness(1.12);
-  -webkit-backdrop-filter: blur(44px) saturate(2.0) brightness(1.12);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--blur-secondary);
+  -webkit-backdrop-filter: var(--blur-secondary);
   border-radius: var(--radius-card);
   padding: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 1px 0 rgba(255, 255, 255, 0.95) inset,
-    0 -0.5px 0 rgba(0, 0, 0, 0.04) inset,
-    0 8px 36px rgba(0, 0, 0, 0.06),
-    0 2px 6px rgba(0, 0, 0, 0.03);
-  will-change: transform;
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 [data-theme="dark"] .gift-card {
@@ -2183,7 +2160,8 @@ main section > .container > * {
 }
 
 .gift-card__action:active {
-  animation: liquidPress 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
   background: var(--gold-subtle);
 }
 
@@ -2230,16 +2208,13 @@ main section > .container > * {
 /* Story Card */
 .story-card {
   flex: 0 0 78%;
-  background: var(--glass-bg-thin);
-  border: 0.5px solid var(--glass-border);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   backdrop-filter: var(--blur-secondary);
   -webkit-backdrop-filter: var(--blur-secondary);
   border-radius: var(--radius-card);
   padding: 24px 22px;
-  box-shadow: 
-    0 2px 6px rgba(0, 0, 0, 0.06),
-    0 8px 16px rgba(0, 0, 0, 0.08),
-    var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
   scroll-snap-align: center;
   position: relative;
@@ -2276,10 +2251,6 @@ main section > .container > * {
       0 12px 28px rgba(0, 0, 0, 0.08),
       var(--glass-inner);
   }
-}
-
-.story-card__number {
-  display: none;
 }
 
 .story-card__year {
@@ -2400,7 +2371,8 @@ main section > .container > * {
 }
 
 .music-toggle:active {
-  animation: liquidPressCircle 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.88);
+  transition: transform 0.1s ease;
 }
 
 .music-toggle__icon {
@@ -2459,7 +2431,8 @@ main section > .container > * {
 }
 
 .theme-toggle:active {
-  animation: liquidPressCircle 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.88);
+  transition: transform 0.1s ease;
 }
 
 .theme-toggle__icon {
@@ -2539,7 +2512,8 @@ main section > .container > * {
 }
 
 .floating-nav__item:active {
-  animation: liquidPressCircle 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.88);
+  transition: transform 0.1s ease;
 }
 
 .floating-nav__item.active {
@@ -2785,7 +2759,7 @@ main section > .container > * {
 .cover__orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
+  filter: blur(var(--cover-orb-blur));
   pointer-events: none;
   z-index: 0;
   opacity: 0;
@@ -2835,16 +2809,6 @@ main section > .container > * {
     opacity: 0.5;
     transform: translateY(8px) scale(0.96);
   }
-}
-
-/* Full-bleed photo background */
-.cover__photo {
-  display: none;
-}
-
-/* Gradient overlay for text readability */
-.cover__overlay {
-  display: none;
 }
 
 .cover.hidden {
@@ -2994,45 +2958,14 @@ main section > .container > * {
     radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.30) 100%);
 }
 
-/* ── Decorative Ornament ── */
-.cover__ornament {
-  width: 200px;
-  margin: 0 auto 14px;
-  opacity: 0;
-  animation: ornamentReveal 0.5s var(--spring-smooth) 0.3s forwards;
-}
-
-.cover__ornament svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.cover__ornament--inner {
-  width: 140px;
-  margin: 12px auto 4px;
-  animation-delay: 0.7s;
-}
-
-@keyframes ornamentReveal {
-  0% {
-    opacity: 0;
-    transform: scaleX(0.4);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
 /* ── Glass Panel — iOS 26 material layer ── */
 .cover__panel {
   width: 100%;
   padding: 32px 28px 28px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 0.5px solid rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(28px) saturate(1.5) brightness(1.05);
-  -webkit-backdrop-filter: blur(28px) saturate(1.5) brightness(1.05);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--blur-secondary);
+  -webkit-backdrop-filter: var(--blur-secondary);
   border-radius: var(--radius-container);
   box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   opacity: 0;
@@ -3052,8 +2985,8 @@ main section > .container > * {
 }
 
 [data-theme="dark"] .cover__panel {
-  background: rgba(10, 10, 12, 0.45);
-  border-color: rgba(255, 255, 255, 0.10);
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
   box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
@@ -3105,19 +3038,6 @@ main section > .container > * {
   color: rgba(255, 255, 255, 0.55);
   margin: 0 0.06em;
   vertical-align: 0.05em;
-}
-
-@keyframes nameReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(16px) scale(0.94);
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
 }
 
 .cover__date {
@@ -3289,15 +3209,6 @@ main section > .container > * {
   }
 }
 
-@keyframes btnPulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.04);
-  }
-}
-
 .cover__btn:hover {
   opacity: 0.92;
   box-shadow:
@@ -3308,46 +3219,12 @@ main section > .container > * {
 }
 
 .cover__btn:active {
-  animation: liquidPress 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  transition: none;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
 .cover__btn:active .cover__btn-icon {
   transform: scale(0.9);
-}
-
-/* ── Cover Animations ── */
-@keyframes coverFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-    filter: blur(3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
-  }
-}
-
-@keyframes ambientFadeIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes coverMeshShift {
-  0% {
-    background-position: 0% 0%;
-    filter: hue-rotate(0deg);
-  }
-  50% {
-    background-position: 5% 3%;
-    filter: hue-rotate(3deg);
-  }
-  100% {
-    background-position: -3% -2%;
-    filter: hue-rotate(-2deg);
-  }
 }
 
 /* ══════════════════════════════════════
@@ -3440,10 +3317,6 @@ main section > .container > * {
     word-break: keep-all;
   }
 
-  .cover__ornament {
-    width: 130px;
-  }
-
   /* Floating sparkles lebih kecil di mobile */
   .cover__sparkle {
     width: 2px;
@@ -3487,9 +3360,6 @@ main section > .container > * {
     padding: 12px 20px;
   }
 
-  .cover__ornament--inner {
-    margin: 8px auto 2px;
-  }
 }
 
 /* ── Cover: layar sangat kecil (360px dan di bawah) ── */
@@ -3506,11 +3376,6 @@ main section > .container > * {
   .cover__subtitle {
     letter-spacing: 0.18em;
     font-size: 0.68rem;
-  }
-
-  .cover__ornament {
-    width: 110px;
-    margin-bottom: 12px;
   }
 
   .cover__btn {
@@ -3599,42 +3464,24 @@ main section > .container > * {
 /* ══════════════════════════════════════
    LIQUID GLASS INTERACTIONS & NATIVE FEEL
 ══════════════════════════════════════ */
-/* iOS 26 Native Tap Squish Hook */
+/* iOS 26 Native Tap — subtle scale feedback */
 button:not(:disabled):active,
 .cover__btn:active,
 .hero__btn:active,
 .gift-card__btn-copy:active,
-.rsvp__segment-btn:active,
 .map-action-pill:active,
-.floating-nav__item:active,
 .event-card:active,
-.gallery__item:active,
 .gift-card:active {
-  animation: liquidPress 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
-
-
-/* Circular interaction for toggles */
+.rsvp__segment-btn:active,
+.floating-nav__item:active,
 .theme-toggle:active,
 .music-toggle:active {
-  animation: liquidPressCircle 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
-}
-
-@keyframes liquidPress {
-  0%   { transform: scale(1); }
-  30%  { transform: scaleX(1.06) scaleY(0.92); }
-  50%  { transform: scaleX(0.95) scaleY(1.04); }
-  70%  { transform: scaleX(1.02) scaleY(0.98); }
-  100% { transform: scale(1); }
-}
-
-@keyframes liquidPressCircle {
-  0%   { transform: scale(1); }
-  30%  { transform: scaleX(1.12) scaleY(0.88); }
-  50%  { transform: scaleX(0.9) scaleY(1.1); }
-  70%  { transform: scaleX(1.05) scaleY(0.95); }
-  100% { transform: scale(1); }
+  transform: scale(0.88);
+  transition: transform 0.1s ease;
 }
 
 @keyframes liquidAppear {
@@ -3775,9 +3622,121 @@ button:not(:disabled):active,
 }
 
 .lightbox-close:active {
-  animation: liquidPressCircle 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform: scale(0.88);
+  transition: transform 0.1s ease;
 }
 
 .lightbox-close:hover {
   background: rgba(255, 255, 255, 0.25);
+}
+
+/* ══════════════════════════════════════
+   MOBILE PERFORMANCE — reduce GPU load
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    /* Halve blur values to reduce compositing cost */
+    --blur-primary: blur(20px) saturate(1.4);
+    --blur-secondary: blur(16px) saturate(1.3);
+    --blur-tertiary: blur(12px) saturate(1.2);
+    --orb-blur: 25px;
+    --cover-orb-blur: 30px;
+  }
+
+  /* Switch fixed backgrounds to scroll for mobile perf */
+  body {
+    background-attachment: scroll;
+  }
+
+  /* Make mesh gradient scroll with content instead of fixed (avoids repaint on scroll) */
+  main::before {
+    position: absolute;
+  }
+
+  /* Static cover mesh — no infinite animation */
+  .cover::before,
+  .cover::after {
+    animation: none;
+  }
+
+  /* Stop floating sparkle particles */
+  .cover__sparkle {
+    animation: none;
+    display: none;
+  }
+
+  /* Stop orb float animation, just show static */
+  .cover__orb {
+    animation: none;
+    opacity: 0.35;
+  }
+
+  /* Reduce parallax orbs to 2 and make static */
+  .parallax-orb--3,
+  .parallax-orb--4 {
+    display: none;
+  }
+
+  /* Reduce lightbox close button blur */
+  .lightbox-close {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Remove backdrop-filter from carousel items — many items = many GPU layers */
+  .gallery__item,
+  .story-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--glass-bg-elevated);
+  }
+
+  /* Simplify glass overlays — skip ::after pseudo tints */
+  .gallery__item::after,
+  .story-card::after {
+    display: none;
+  }
+
+  /* Reduce transition complexity on cards */
+  .gallery__item,
+  .story-card,
+  .event-card,
+  .couple-card {
+    transition: transform 0.2s ease;
+  }
+
+  /* Fixed elements: minimal blur to reduce scroll repaint cost */
+  .floating-nav {
+    backdrop-filter: blur(12px) saturate(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  }
+
+  .music-toggle,
+  .theme-toggle {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* ══════════════════════════════════════
+   PREFERS REDUCED MOTION — a11y + perf
+══════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .parallax-orb,
+  .cover__orb,
+  .cover__sparkle {
+    display: none !important;
+  }
+
+  body {
+    animation: none !important;
+    background-attachment: scroll !important;
+  }
 }

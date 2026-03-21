@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  // ── Performance detection ──
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // ── Cover Gate ──
   const cover = document.getElementById('cover');
   const openBtn = document.getElementById('openInvitation');
@@ -166,7 +170,7 @@
 
   // ── Scroll Reveal ──
   function initReveal() {
-    var reveals = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .reveal-scale-up, .opening-frame');
+    var reveals = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .reveal-scale-up');
     if (!('IntersectionObserver' in window)) {
       reveals.forEach(function (el) { el.classList.add('visible'); });
       return;
@@ -369,15 +373,19 @@
 
   // ── Load wishes from Supabase ──
   function loadWishes() {
+    var loadingEl = document.getElementById('wishesLoading');
+    if (loadingEl) loadingEl.style.display = '';
     supabaseFetch('rsvp?message=not.is.null&message=not.eq.&select=name,message,created_at&order=created_at.desc')
       .then(function(res) { return res.json(); })
       .then(function(data) {
+        if (loadingEl) loadingEl.style.display = 'none';
         if (Array.isArray(data)) {
           allWishes = data;
         }
         renderWishes();
       })
       .catch(function(err) {
+        if (loadingEl) loadingEl.style.display = 'none';
         console.error('Load wishes error:', err);
         renderWishes();
       });
@@ -511,12 +519,18 @@
 
     if (!name || !attendInput.value) {
       if (!name) {
+        var errorEl = document.getElementById('rsvpNameError');
         nameInput.style.outline = '2px solid #ff3b30';
-        nameInput.setAttribute('placeholder', 'Nama wajib diisi');
+        if (errorEl) {
+          errorEl.textContent = 'Nama wajib diisi';
+          errorEl.classList.add('rsvp__error--visible');
+        }
         setTimeout(function() {
           nameInput.style.outline = '';
-          nameInput.setAttribute('placeholder', 'Masukkan nama');
-        }, 2000);
+          if (errorEl) {
+            errorEl.classList.remove('rsvp__error--visible');
+          }
+        }, 3000);
       }
       return;
     }
@@ -592,21 +606,23 @@
       });
     });
 
-    // Holographic shimmer on scroll (uses unified scroll handler)
-    var cards = document.querySelectorAll('.gift-card');
-    function updateShimmer() {
-      var vh = window.innerHeight;
-      cards.forEach(function(card) {
-        var shimmer = card.querySelector('.gift-card__shimmer');
-        if (!shimmer) return;
-        var rect = card.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > vh) return; // skip off-screen
-        var progress = 1 - (rect.top / vh);
-        var pos = Math.max(0, Math.min(100, progress * 100));
-        shimmer.style.backgroundPosition = pos + '% 0';
-      });
+    // Holographic shimmer on scroll (skip on mobile for perf)
+    if (!isMobile) {
+      var giftCards = document.querySelectorAll('.gift-card');
+      var updateShimmer = function() {
+        var vh = window.innerHeight;
+        giftCards.forEach(function(card) {
+          var shimmer = card.querySelector('.gift-card__shimmer');
+          if (!shimmer) return;
+          var rect = card.getBoundingClientRect();
+          if (rect.bottom < 0 || rect.top > vh) return; // skip off-screen
+          var progress = 1 - (rect.top / vh);
+          var pos = Math.max(0, Math.min(100, progress * 100));
+          shimmer.style.backgroundPosition = pos + '% 0';
+        });
+      };
+      scrollCallbacks.push(updateShimmer);
     }
-    scrollCallbacks.push(updateShimmer);
   })();
 
   // ── Copy Address Button ──
@@ -780,9 +796,42 @@
     closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
     overlay.appendChild(closeBtn);
 
+    // Prev/Next buttons
+    var prevBtn = document.createElement('button');
+    prevBtn.className = 'lightbox-nav lightbox-nav--prev';
+    prevBtn.setAttribute('aria-label', 'Foto sebelumnya');
+    prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>';
+    overlay.appendChild(prevBtn);
+
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'lightbox-nav lightbox-nav--next';
+    nextBtn.setAttribute('aria-label', 'Foto berikutnya');
+    nextBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>';
+    overlay.appendChild(nextBtn);
+
+    // Counter
+    var counter = document.createElement('span');
+    counter.className = 'lightbox-counter';
+    overlay.appendChild(counter);
+
+    var currentIndex = 0;
+    var galleryImages = Array.from(items).map(function(item) {
+      var photo = item.querySelector('img');
+      return photo ? photo.src : '';
+    }).filter(Boolean);
+
+    function updateNav() {
+      prevBtn.disabled = currentIndex <= 0;
+      nextBtn.disabled = currentIndex >= galleryImages.length - 1;
+      counter.textContent = (currentIndex + 1) + ' / ' + galleryImages.length;
+    }
+
     function openLightbox(src) {
       if (!src) return;
+      currentIndex = galleryImages.indexOf(src);
+      if (currentIndex < 0) currentIndex = 0;
       img.src = src;
+      updateNav();
       overlay.classList.add('lightbox-overlay--show');
       document.body.style.overflow = 'hidden';
     }
@@ -790,6 +839,22 @@
     function closeLightbox() {
       overlay.classList.remove('lightbox-overlay--show');
       document.body.style.overflow = '';
+    }
+
+    function showPrev() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        img.src = galleryImages[currentIndex];
+        updateNav();
+      }
+    }
+
+    function showNext() {
+      if (currentIndex < galleryImages.length - 1) {
+        currentIndex++;
+        img.src = galleryImages[currentIndex];
+        updateNav();
+      }
     }
 
     items.forEach(function(item) {
@@ -800,11 +865,17 @@
     });
 
     closeBtn.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', showPrev);
+    nextBtn.addEventListener('click', showNext);
     overlay.addEventListener('click', function(e) {
       if (e.target === overlay) closeLightbox();
     });
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeLightbox();
+      if (overlay.classList.contains('lightbox-overlay--show')) {
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
+      }
     });
   })();
 
@@ -892,8 +963,11 @@
     }, { passive: true });
   })();
 
-  // ── Parallax Floating Orbs ──
+  // ── Parallax Floating Orbs (disabled on mobile for performance) ──
   (function initParallax() {
+    // Skip parallax entirely on mobile — too many layout reads per frame
+    if (isMobile || prefersReducedMotion) return;
+
     var orbs = document.querySelectorAll('.parallax-orb');
     if (!orbs.length) return;
 
@@ -1132,36 +1206,20 @@
       }, { passive: true });
     }
 
-    // Jelly touch on tap/click
+    // iOS 26 tap feedback — subtle scale-down on press, spring back on release
     cards.forEach(function(card) {
-      card.addEventListener('pointerdown', function(e) {
-        if (card._jellyActive) return;
-        card._jellyActive = true;
-        card._gyroActive = false;
-        var rect = card.getBoundingClientRect();
-        var x = (e.clientX - rect.left) / rect.width - 0.5;
-        var y = (e.clientY - rect.top) / rect.height - 0.5;
-        var start = performance.now();
-        var dur = 500;
-
-        function jellyFrame(ts) {
-          var t = (ts - start) / dur;
-          if (t > 1) t = 1;
-          var decay = Math.exp(-5 * t);
-          var wobble = Math.sin(12 * t) * decay;
-          var sx = 1 + wobble * 0.03;
-          var sy = 1 - wobble * 0.03;
-          var rx = -y * wobble * 3;
-          var ry = x * wobble * 3;
-          card.style.transform = 'perspective(1200px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) scaleX(' + sx + ') scaleY(' + sy + ')';
-          if (t < 1) {
-            requestAnimationFrame(jellyFrame);
-          } else {
-            card._jellyActive = false;
-            card.style.transform = '';
-          }
-        }
-        requestAnimationFrame(jellyFrame);
+      card.style.transition = 'transform 0.2s cubic-bezier(0.2, 0, 0, 1)';
+      card.addEventListener('pointerdown', function() {
+        card.style.transform = 'scale(0.97)';
+      });
+      card.addEventListener('pointerup', function() {
+        card.style.transform = '';
+      });
+      card.addEventListener('pointerleave', function() {
+        card.style.transform = '';
+      });
+      card.addEventListener('pointercancel', function() {
+        card.style.transform = '';
       });
     });
   })();
