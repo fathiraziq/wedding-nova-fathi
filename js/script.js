@@ -19,7 +19,6 @@
     }).catch(function () {
       musicToggle.classList.add('paused');
       musicToggle.classList.remove('playing');
-      // Show tap-to-play hint on iOS autoplay block
       musicToggle.setAttribute('title', 'Tap untuk putar musik');
     });
   }
@@ -106,8 +105,7 @@
     document.body.style.width = '';
     window.scrollTo(0, 0);
     floatingNav.classList.remove('hidden');
-    musicToggle.classList.remove('hidden');
-    themeToggle.classList.remove('hidden');
+    musicToggle.classList.remove('hidden'); // Muncul setelah buka undangan
     setTimeout(initReveal, 300);
     playMusic();
   }
@@ -708,6 +706,7 @@
 
     var isVisible = false;
     var themeToggle = document.getElementById('themeToggle');
+    var musicToggleEl = document.getElementById('musicToggle');
 
     function checkScroll() {
       var rect = eventSection.getBoundingClientRect();
@@ -717,11 +716,13 @@
         liveEl.classList.add('visible');
         liveEl.classList.remove('hidden');
         if (themeToggle) themeToggle.classList.add('shifted');
+        if (musicToggleEl) musicToggleEl.classList.add('shifted');
       } else if (!shouldShow && isVisible) {
         isVisible = false;
         liveEl.classList.remove('visible');
         liveEl.classList.add('hidden');
         if (themeToggle) themeToggle.classList.remove('shifted');
+        if (musicToggleEl) musicToggleEl.classList.remove('shifted');
       }
     }
 

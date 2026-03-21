@@ -278,18 +278,57 @@ html {
   color: var(--gray-900);
 }
 
-/* ── Dark mode text readability fixes ── */
-[data-theme="dark"] .cover__subtitle,
-[data-theme="dark"] .cover__guest-label {
-  color: var(--gray-600);
+/* ── Cover text: light mode pakai warna gelap (biar kontras di panel glass krem),
+   dark mode biarkan default putih (cocok di atas panel hitam) ── */
+.cover__subtitle {
+  color: rgba(30, 20, 10, 0.65) !important;
+}
+
+.cover__amp {
+  color: rgba(30, 20, 10, 0.40) !important;
+}
+
+.cover__date {
+  color: rgba(30, 20, 10, 0.55) !important;
+}
+
+.cover__guest-label {
+  color: rgba(30, 20, 10, 0.50) !important;
+}
+
+.cover__names {
+  color: rgba(15, 10, 5, 0.90) !important;
+  text-shadow: 0 1px 6px rgba(255,255,255,0.15);
+}
+
+.cover__guest-name {
+  color: rgba(15, 10, 5, 0.88) !important;
+}
+
+/* Dark mode: kembalikan ke putih karena background panel sudah gelap */
+[data-theme="dark"] .cover__subtitle {
+  color: rgba(255, 255, 255, 0.75) !important;
 }
 
 [data-theme="dark"] .cover__amp {
-  color: var(--gray-500);
+  color: rgba(255, 255, 255, 0.45) !important;
 }
 
 [data-theme="dark"] .cover__date {
-  color: var(--gray-600);
+  color: rgba(255, 255, 255, 0.60) !important;
+}
+
+[data-theme="dark"] .cover__guest-label {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+[data-theme="dark"] .cover__names {
+  color: #ffffff !important;
+  text-shadow: 0 1px 24px rgba(0,0,0,0.18);
+}
+
+[data-theme="dark"] .cover__guest-name {
+  color: #ffffff !important;
 }
 
 [data-theme="dark"] .event-card__weekday,
@@ -581,7 +620,6 @@ main section > .container > * {
 @media (hover: hover) {
   .hero__card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 12px 28px rgba(0,0,0,0.08), var(--glass-inner);
   }
 }
 
@@ -849,7 +887,6 @@ main section > .container > * {
 @media (hover: hover) {
   .couple-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 12px 28px rgba(0,0,0,0.08), var(--glass-inner);
   }
 }
 
@@ -1218,7 +1255,7 @@ main section > .container > * {
   border-radius: 100px;
   backdrop-filter: var(--blur-secondary);
   -webkit-backdrop-filter: var(--blur-secondary);
-  box-shadow: var(--glass-shadow);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   color: var(--gray-800);
   font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
@@ -1325,10 +1362,7 @@ main section > .container > * {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 2px 6px rgba(0, 0, 0, 0.06),
-    0 8px 16px rgba(0, 0, 0, 0.08),
-    var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
   cursor: pointer;
   contain: layout style;
@@ -1559,7 +1593,7 @@ main section > .container > * {
 [data-theme="dark"] .rsvp__segment {
   background: var(--glass-bg);
   border-color: var(--glass-border);
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 /* Active pill indicator — mirrors floating-nav__pill */
@@ -1588,7 +1622,7 @@ main section > .container > * {
 [data-theme="dark"] .rsvp__segment-slider {
   background: var(--glass-highlight);
   border-color: var(--glass-border);
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 .rsvp__segment-btn {
@@ -1986,7 +2020,7 @@ main section > .container > * {
   border-color: var(--glass-border);
   backdrop-filter: var(--blur-secondary);
   -webkit-backdrop-filter: var(--blur-secondary);
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 .gift-card::before {
@@ -2231,7 +2265,7 @@ main section > .container > * {
 .story-card--highlight {
   background: var(--glass-bg);
   border: 0.5px solid var(--gold-muted);
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 @media (hover: hover) {
@@ -2333,11 +2367,11 @@ main section > .container > * {
 /* ══════════════════════════════════════
    MUSIC TOGGLE — Floating Top Right
 ══════════════════════════════════════ */
-/* ── Music Toggle — Original Circular Glass ── */
+/* ── Music Toggle ── */
 .music-toggle {
   position: fixed;
   top: max(20px, env(safe-area-inset-top, 20px));
-  right: 20px;
+  right: 72px;
   z-index: 2001;
   width: 44px;
   height: 44px;
@@ -2352,7 +2386,11 @@ main section > .container > * {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.35s var(--spring-smooth), transform 0.35s var(--spring-smooth), background 0.25s var(--spring-smooth);
+  transition: opacity 0.35s var(--spring-smooth), transform 0.35s var(--spring-smooth), background 0.25s var(--spring-smooth), right 0.4s var(--spring-smooth);
+}
+
+.music-toggle.shifted {
+  right: 20px;
 }
 
 .music-toggle.hidden {
@@ -2391,7 +2429,7 @@ main section > .container > * {
 .theme-toggle {
   position: fixed;
   top: max(20px, env(safe-area-inset-top, 20px));
-  right: 72px;
+  right: 20px;
   z-index: 2001;
   width: 44px;
   height: 44px;
@@ -2472,7 +2510,7 @@ main section > .container > * {
 [data-theme="dark"] .floating-nav {
   background: var(--glass-bg);
   border-color: var(--glass-border);
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 .floating-nav.hidden {
@@ -2529,7 +2567,7 @@ main section > .container > * {
 [data-theme="dark"] .floating-nav__pill {
   background: var(--glass-highlight);
   border-color: var(--glass-border);
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 .floating-nav__pill.visible {
@@ -2996,10 +3034,7 @@ main section > .container > * {
   backdrop-filter: blur(28px) saturate(1.5) brightness(1.05);
   -webkit-backdrop-filter: blur(28px) saturate(1.5) brightness(1.05);
   border-radius: var(--radius-container);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -0.5px 0 rgba(0, 0, 0, 0.05),
-    0 8px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   opacity: 0;
   animation: panelReveal 0.6s var(--spring-smooth) 0.4s forwards;
   position: relative;
@@ -3019,9 +3054,7 @@ main section > .container > * {
 [data-theme="dark"] .cover__panel {
   background: rgba(10, 10, 12, 0.45);
   border-color: rgba(255, 255, 255, 0.10);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 8px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
 }
 
 @keyframes panelReveal {
@@ -3156,10 +3189,10 @@ main section > .container > * {
   padding: 14px 20px;
   min-height: 54px;
   margin-top: 0;
-  /* iOS 26 Liquid Glass — frosted white pill */
-  background: rgba(255, 255, 255, 0.22);
-  color: #ffffff;
-  border: 0.5px solid rgba(255, 255, 255, 0.42);
+  /* iOS 26 Liquid Glass — frosted pill */
+  background: rgba(255, 255, 255, 0.55);
+  color: rgba(20, 12, 4, 0.82); /* gelap di light mode */
+  border: 0.5px solid rgba(255, 255, 255, 0.60);
   border-radius: 980px;
   font-family: 'Inter', sans-serif;
   font-size: 0.95rem;
@@ -3175,7 +3208,7 @@ main section > .container > * {
   justify-content: flex-start;
   gap: 14px;
   box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.65),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.80),
     inset 0 -0.5px 0 rgba(0, 0, 0, 0.06),
     0 4px 20px rgba(0, 0, 0, 0.14),
     0 1px 3px rgba(0, 0, 0, 0.08);
@@ -3187,6 +3220,7 @@ main section > .container > * {
 
 [data-theme="dark"] .cover__btn {
   background: rgba(255, 255, 255, 0.10);
+  color: #ffffff; /* putih di dark mode */
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.15),
@@ -3213,10 +3247,15 @@ main section > .container > * {
   height: 34px;
   min-width: 34px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.90);
-  color: rgba(0, 0, 0, 0.55);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10);
+  background: rgba(20, 12, 4, 0.12); /* ikon: lingkaran gelap di light mode */
+  color: rgba(20, 12, 4, 0.75);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s var(--spring-smooth);
+}
+
+[data-theme="dark"] .cover__btn-icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.90);
 }
 
 .cover__btn-icon svg {
@@ -3228,7 +3267,11 @@ main section > .container > * {
   flex: 1;
   text-align: center;
   padding-right: 34px;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
+  text-shadow: none; /* light mode: tidak perlu shadow gelap */
+}
+
+[data-theme="dark"] .cover__btn-text {
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
 }
 
 
@@ -3350,9 +3393,6 @@ main section > .container > * {
     display: none;
   }
 
-  .music-toggle.playing {
-    animation: none;
-  }
 }
 
 /* ── Mobile GPU optimization — reduce blur for low-end devices ── */
@@ -3567,19 +3607,18 @@ button:not(:disabled):active,
 .rsvp__segment-btn:active,
 .map-action-pill:active,
 .floating-nav__item:active,
-.music-toggle:active,
-.theme-toggle:active {
-  transform: scale(0.94);
-  transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-  opacity: 0.85;
+.event-card:active,
+.gallery__item:active,
+.gift-card:active {
+  animation: liquidPress 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
 }
 
-/* Card hover/tap interaction for depth */
-.event-card:active,
-.gallery-item:active,
-.gift-card:active {
-  transform: scale(0.98);
-  transition: transform 0.15s var(--spring-smooth) !important;
+
+
+/* Circular interaction for toggles */
+.theme-toggle:active,
+.music-toggle:active {
+  animation: liquidPressCircle 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
 }
 
 @keyframes liquidPress {
@@ -3632,7 +3671,7 @@ button:not(:disabled):active,
   font-weight: 400;
   color: var(--gray-700);
   white-space: nowrap;
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   opacity: 0;
   transition: opacity 0.35s var(--spring-smooth), transform 0.35s var(--spring-smooth);
   pointer-events: none;
@@ -3661,7 +3700,7 @@ button:not(:disabled):active,
   color: var(--gray-800);
   text-align: center;
   max-width: calc(100vw - 40px);
-  box-shadow: var(--glass-shadow), var(--glass-inner);
+  box-shadow: var(--glass-shadow-elevated), var(--glass-inner-strong);
   opacity: 0;
   transition: opacity 0.45s var(--spring-smooth), transform 0.45s var(--spring-smooth);
   pointer-events: none;
