@@ -12,13 +12,28 @@ Static wedding invitation. Vanilla stack, no framework, no build step.
 - Google Maps Embed
 - GitHub Pages
 
+## ⚠️ Privacy Notice
+
+Semua foto asli telah diganti dengan **SVG placeholder** untuk alasan privasi (repo ini public). Setiap placeholder menampilkan dimensi asli foto.
+
+| File | Dimensi Asli |
+|------|-------------|
+| `assets/images/cover/cover.jpg` | 768 × 1024 |
+| `assets/images/hero/couple.jpg` | 1084 × 1354 |
+| `assets/images/couple/bride.jpeg` | 1134 × 1418 |
+| `assets/images/couple/groom.jpeg` | 1134 × 1418 |
+| `assets/images/gallery/1.jpg` — `14.jpg` | 900 × 1200 |
+| `assets/images/gallery/15.jpg` — `17.jpg` | 901 × 1200 |
+
+Untuk deploy, ganti semua file placeholder dengan foto asli sesuai dimensi. Lihat `assets/images/README.md` untuk panduan lengkap.
+
 ## Files
 
 ```
 index.html          975 loc   markup, 10 sections
 css/style.css      3500 loc   design system, 18 keyframes, dark mode
 js/script.js       1400 loc   interactions, physics, supabase client
-assets/images/                hero, couple, gallery
+assets/images/                hero, couple, gallery (placeholder SVG)
 assets/music/                 background audio
 ```
 

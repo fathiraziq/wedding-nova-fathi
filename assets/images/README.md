@@ -1,5 +1,7 @@
 # Panduan Foto — Wedding Invitation
 
+> **⚠️ Privacy Notice:** Semua foto asli telah diganti dengan placeholder SVG untuk alasan privasi (repo ini public di GitHub). Setiap placeholder menampilkan dimensi asli foto (misal `1084 x 1354`). Ganti file placeholder dengan foto asli sebelum deploy.
+
 Undangan ini dioptimasi untuk **mobile-first**. Pastikan semua foto dikompresi sebelum digunakan agar loading cepat, terutama di jaringan 4G/3G.
 
 ---
