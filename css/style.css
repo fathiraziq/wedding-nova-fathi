@@ -70,8 +70,11 @@ body {
   --blur-primary: blur(42px) saturate(1.8) brightness(1.1);
   --blur-secondary: blur(32px) saturate(1.6) brightness(1.05);
   --blur-tertiary: blur(20px) saturate(1.4) brightness(1.02);
-  --radius-container: 38px;
-  --radius-card: 28px;
+  --radius-container: 48px;
+  --radius-card: 42px;
+  --radius-element: 32px;
+  --radius-pill: 100px;
+  --radius-circle: 50%;
 }
 
 /* ── Cover text adjustments for dark background ── */
@@ -285,138 +288,72 @@ main section > .container > * {
   aspect-ratio: 4 / 5;
   background: var(--glass-bg);
   border: 0.5px solid var(--glass-border);
-  border-radius: 42px; /* Large premium rounding like the reference */
+  border-radius: var(--radius-card);
   overflow: hidden;
   box-shadow: 
-    0 30px 60px -12px rgba(0,0,0,0.25),
+    0 20px 40px -10px rgba(0,0,0,0.15),
     var(--glass-shadow-ring),
     var(--glass-inner-strong);
   transition: transform 0.4s var(--spring-smooth), box-shadow 0.4s var(--spring-smooth);
-  display: flex;
-  flex-direction: column;
+}
+
+.hero__card:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 .hero__card-photo {
   position: absolute;
   inset: 0;
   z-index: 0;
-  overflow: hidden;
 }
 
-/* Floating Badge in top right */
-.hero__badge {
+.hero__card-overlay {
   position: absolute;
-  top: 24px;
-  right: 24px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(12px) saturate(1.8);
-  -webkit-backdrop-filter: blur(12px) saturate(1.8);
-  border: 0.5px solid rgba(255, 255, 255, 0.3);
-  border-radius: 100px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  z-index: 1;
+  pointer-events: none;
 }
 
-.hero__badge svg {
-  width: 14px;
-  height: 14px;
-  color: #ff3b30; /* Red heart style */
-}
-
-.hero__badge span {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: -0.01em;
-}
-
-/* Bottom Glass Panel (Blue Discovery Style) */
 .hero__card-info {
-  position: relative;
-  margin-top: auto;
-  z-index: 5;
-  padding: 24px 28px 32px;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 31, 92, 0.3) 0%,
-    rgba(0, 31, 92, 0.6) 100%
-  );
-  backdrop-filter: blur(25px) saturate(1.8);
-  -webkit-backdrop-filter: blur(25px) saturate(1.8);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.2);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px;
+  z-index: 2;
+  text-align: center;
 }
 
-.hero__info-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
+.hero__card-divider {
+  width: 28px;
+  height: 1.5px;
+  background: var(--white);
+  margin: 0 auto 16px;
+  opacity: 0.8;
+  border-radius: var(--radius-pill);
 }
 
 .hero__card-names {
   font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
   font-weight: 400;
   color: var(--white);
-  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
 }
 
-.hero__info-location {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.hero__info-location svg {
-  width: 14px;
-  height: 14px;
-}
-
-.hero__info-location span {
-  font-size: 0.8rem;
-  font-weight: 400;
-}
-
-.hero__info-status .status-price {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #34c759; /* Green price style like reference */
-}
-
-.hero__info-divider {
-  height: 0.5px;
-  background: rgba(255, 255, 255, 0.2);
-  margin-bottom: 20px;
-}
-
-.hero__info-stats {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.hero__stat {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--white);
-}
-
-.hero__stat svg {
-  width: 18px;
-  height: 18px;
-  opacity: 0.9;
-}
-
-.hero__stat span {
-  font-size: 0.8rem;
+.hero__card-date {
+  font-size: 0.85rem;
   font-weight: 500;
+  color: var(--white);
+  opacity: 0.8;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
+
+
 
 /* ══════════════════════════════════════
    ISLAMIC OPENING
@@ -605,13 +542,14 @@ main section > .container > * {
 
 .couple-card {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   background: var(--glass-bg);
   border: 0.5px solid var(--glass-border);
-  border-radius: 32px;
+  border-radius: var(--radius-card);
   box-shadow: var(--glass-shadow-ring), var(--glass-inner-strong);
   transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
 }
@@ -622,16 +560,19 @@ main section > .container > * {
   z-index: 0;
 }
 
-/* Discrete Blue Glass Panel for Couple Info */
+.couple-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+  z-index: 1;
+  pointer-events: none;
+}
+
 .couple-card__info {
   position: relative;
-  margin-top: auto;
-  z-index: 5;
-  padding: 20px 24px 24px;
-  background: rgba(0, 31, 92, 0.4);
-  backdrop-filter: blur(20px) saturate(1.8);
-  -webkit-backdrop-filter: blur(20px) saturate(1.8);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.15);
+  z-index: 2;
+  padding: 32px 24px;
+  text-align: left;
 }
 
 .couple-card__name {
@@ -643,10 +584,10 @@ main section > .container > * {
 }
 
 .couple-card__parents {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
 }
 
 .couple-card__parents strong {
@@ -677,6 +618,31 @@ main section > .container > * {
 .couple-card__ig:hover {
   background: rgba(255, 255, 255, 0.2);
   color: var(--white);
+}
+
+/* — Couple separator: line + & + line — */
+.couple__separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 28px 0;
+}
+.couple__separator-line {
+  width: 32px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--white), transparent);
+  opacity: 0.3;
+  border-radius: var(--radius-pill);
+}
+.couple__separator-symbol {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-style: italic;
+  color: var(--white);
+  font-weight: 400;
+  line-height: 1;
+  opacity: 0.8;
 }
 
 /* ══════════════════════════════════════
@@ -797,7 +763,7 @@ main section > .container > * {
   width: 3.5px;
   align-self: stretch;
   min-height: 36px;
-  border-radius: 3px;
+  border-radius: var(--radius-pill);
   flex-shrink: 0;
 }
 
@@ -1003,9 +969,10 @@ main section > .container > * {
   display: block;
   width: 48px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+  background: linear-gradient(90deg, transparent, var(--white), transparent);
   margin: 16px auto;
-  opacity: 0.5;
+  opacity: 0.3;
+  border-radius: var(--radius-pill);
 }
 
 /* ══════════════════════════════════════
@@ -1584,7 +1551,7 @@ main section > .container > * {
   margin-left: 30px;
   background: rgba(255, 255, 255, 0.10);
   border: 0.5px solid rgba(255, 255, 255, 0.25);
-  border-radius: 4px 18px 18px 18px;
+  border-radius: var(--radius-element);
   padding: 12px 16px;
   box-shadow:
     0 0 0 0.5px rgba(255, 255, 255, 0.08),
@@ -2252,7 +2219,7 @@ main section > .container > * {
 .loading-overlay__bar {
   width: 180px;
   height: 3px;
-  border-radius: 2px;
+  border-radius: var(--radius-pill);
   background: rgba(120, 120, 128, 0.1);
   overflow: hidden;
 }
@@ -2260,7 +2227,7 @@ main section > .container > * {
 .loading-overlay__bar-fill {
   height: 100%;
   width: 0%;
-  border-radius: 2px;
+  border-radius: var(--radius-pill);
   background: var(--gray-400);
   transition: width 0.3s ease;
 }
@@ -3052,7 +3019,7 @@ button:not(:disabled):active,
   backdrop-filter: blur(30px) saturate(1.6) brightness(1.05);
   -webkit-backdrop-filter: blur(30px) saturate(1.6) brightness(1.05);
   border: 0.5px solid var(--glass-border);
-  border-radius: 14px;
+  border-radius: var(--radius-element);
   padding: 12px 20px;
   font-size: 0.75rem;
   font-weight: 400;
@@ -3083,7 +3050,7 @@ button:not(:disabled):active,
   backdrop-filter: blur(30px) saturate(1.6) brightness(1.05);
   -webkit-backdrop-filter: blur(30px) saturate(1.6) brightness(1.05);
   border: 0.5px solid var(--glass-border);
-  border-radius: 20px;
+  border-radius: var(--radius-element);
   padding: 14px 24px;
   font-size: 0.85rem;
   font-weight: 400;
@@ -3137,7 +3104,7 @@ button:not(:disabled):active,
 .lightbox-img {
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 120px);
-  border-radius: 16px;
+  border-radius: var(--radius-element);
   object-fit: contain;
   transform: scale(0.92);
   transition: transform 0.45s var(--spring-smooth);
