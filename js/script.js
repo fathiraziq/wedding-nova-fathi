@@ -13,7 +13,6 @@
   // ── Background Music ──
   const bgMusic = document.getElementById('bgMusic');
   const musicToggle = document.getElementById('musicToggle');
-  const themeToggle = document.getElementById('themeToggle');
   bgMusic.volume = 0.4;
 
   function playMusic() {
@@ -140,23 +139,6 @@
   document.body.style.width = '100%';
   document.body.style.overflow = 'hidden';
 
-  // ── Dark Mode Toggle ──
-  (function initTheme() {
-    var saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-    themeToggle.addEventListener('click', function () {
-      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    });
-  })();
 
   // Focus trap for cover dialog (iOS accessibility)
   cover.addEventListener('keydown', function(e) {
@@ -721,7 +703,6 @@
     if (!liveEl || !eventSection) return;
 
     var isVisible = false;
-    var themeToggle = document.getElementById('themeToggle');
     var musicToggleEl = document.getElementById('musicToggle');
 
     function checkScroll() {
@@ -731,13 +712,11 @@
         isVisible = true;
         liveEl.classList.add('visible');
         liveEl.classList.remove('hidden');
-        if (themeToggle) themeToggle.classList.add('shifted');
         if (musicToggleEl) musicToggleEl.classList.add('shifted');
       } else if (!shouldShow && isVisible) {
         isVisible = false;
         liveEl.classList.remove('visible');
         liveEl.classList.add('hidden');
-        if (themeToggle) themeToggle.classList.remove('shifted');
         if (musicToggleEl) musicToggleEl.classList.remove('shifted');
       }
     }

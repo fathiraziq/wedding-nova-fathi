@@ -31,7 +31,7 @@ Untuk deploy, ganti semua file placeholder dengan foto asli sesuai dimensi. Liha
 
 ```
 index.html          975 loc   markup, 10 sections
-css/style.css      3500 loc   design system, 18 keyframes, dark mode
+css/style.css      3500 loc   design system, 18 keyframes
 js/script.js       1400 loc   interactions, physics, supabase client
 assets/images/                hero, couple, gallery (placeholder SVG)
 assets/music/                 background audio
@@ -39,7 +39,7 @@ assets/music/                 background audio
 
 ## CSS Architecture
 
-35+ custom properties. Full dark mode via `[data-theme="dark"]` override.
+35+ custom properties. Light mode only.
 
 **Blur hierarchy (iOS 26 tier system):**
 ```css
@@ -59,7 +59,7 @@ container: 28px → card: 22px → element: 16px → small: 12px
 --spring-smooth: cubic-bezier(0.175, 0.885, 0.32, 1.275)
 ```
 
-Gray scale `--gray-50` through `--gray-950`, inverted in dark mode. Glass layer: `--glass-bg`, `--glass-border`, `--glass-highlight`, `--glass-shadow`, `--glass-inner`.
+Gray scale `--gray-50` through `--gray-950`. Glass layer: `--glass-bg`, `--glass-border`, `--glass-highlight`, `--glass-shadow`, `--glass-inner`.
 
 ## JS Modules
 
