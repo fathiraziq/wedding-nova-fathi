@@ -3,36 +3,28 @@
   margin: 0; 
   padding: 0; 
   box-sizing: border-box; 
-  -webkit-tap-highlight-color: transparent; /* Native iOS feel: no gray tap box */
-}
-
-body {
-  /* Prevent copying text on UI elements to feel like a real app */
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* Allow text selection only on specific content areas */
-p, h1, h2, h3, .gift-card__number, input, textarea {
-  user-select: auto;
-  -webkit-user-select: auto;
-}
-
-/* Hide scrollbar for a seamless edge-to-edge iOS liquid feel */
-::-webkit-scrollbar {
-  display: none;
-}
-
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
-
-:focus-visible {
-  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
+  scroll-behavior: smooth;
   scroll-padding-top: 80px;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;    /* Firefox */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--white); /* Default to white for the dark theme */
+  background: linear-gradient(135deg, #001f5c 0%, #00a8cc 100%);
+  background-attachment: fixed;
+  line-height: 1.5;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  padding-bottom: 100px;
 }
 
 :root {
@@ -50,126 +42,46 @@ html {
   --gray-900: #1c1c1e;
   --gray-950: #0a0a0c;
   /* iOS 26 Liquid Glass — Core Material Tokens */
-  --glass-bg: rgba(255, 255, 255, 0.22);           /* Thinner = true glass translucency */
-  --glass-bg-elevated: rgba(255, 255, 255, 0.32);
-  --glass-bg-thin: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.55);
-  --glass-border-subtle: rgba(255, 255, 255, 0.30);
-  --glass-border-ring: rgba(255, 255, 255, 0.38);   /* Double-ring outer edge */
-  --glass-highlight: rgba(255, 255, 255, 0.88);
-  --glass-tint: rgba(200, 200, 215, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.18);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.28);
+  --glass-bg-thin: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-border-subtle: rgba(255, 255, 255, 0.25);
+  --glass-border-ring: rgba(255, 255, 255, 0.35);
+  --glass-highlight: rgba(255, 255, 255, 0.80);
+  --glass-tint: rgba(200, 200, 215, 0.05);
   --glass-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.03),
-    0 8px 28px rgba(0, 0, 0, 0.07),
-    0 1px 2px rgba(0, 0, 0, 0.04);
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.15);
   --glass-shadow-elevated: 
-    0 4px 8px rgba(0, 0, 0, 0.04),
-    0 16px 48px rgba(0, 0, 0, 0.09),
-    0 1px 3px rgba(0, 0, 0, 0.05);
+    0 16px 48px rgba(0, 0, 0, 0.2);
   --glass-shadow-ring: 
-    0 0 0 0.5px rgba(255, 255, 255, 0.35),
-    0 4px 8px rgba(0, 0, 0, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.06);
+    0 0 0 0.5px rgba(255, 255, 255, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.12);
   --glass-inner: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.75),
-    inset 0 -0.5px 0 rgba(0, 0, 0, 0.04);
-  --glass-inner-strong: 
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
     inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
-  --glass-inner-btn:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.03),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.30);
+  --glass-inner-strong: 
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
   --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --spring-smooth: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --section-gap: 48px;
-  /* Accent — monochrome */
-  --gold: #8e8e93;
-  --gold-light: #aeaeb2;
-  --gold-muted: rgba(142, 142, 147, 0.35);
-  --gold-subtle: rgba(142, 142, 147, 0.12);
-  /* iOS 26 — 3-tier blur hierarchy */
-  --blur-primary: blur(48px) saturate(1.8) brightness(1.1);
-  --blur-secondary: blur(36px) saturate(1.6) brightness(1.05);
-  --blur-tertiary: blur(24px) saturate(1.4) brightness(1.02);
-  /* Performance — orb blur (overridden on mobile) */
-  --orb-blur: 50px;
-  --cover-orb-blur: 60px;
-  /* iOS 26 — 4-tier radius scale (Squircles - larger for liquid feel) */
-  --radius-container: 36px;
+  --blur-primary: blur(42px) saturate(1.8) brightness(1.1);
+  --blur-secondary: blur(32px) saturate(1.6) brightness(1.05);
+  --blur-tertiary: blur(20px) saturate(1.4) brightness(1.02);
+  --radius-container: 38px;
   --radius-card: 28px;
-  --radius-element: 20px;
-  --radius-small: 14px;
 }
 
-/* ── Cover ── */
-/* Force ornament color to always be white on photo background — consistent light/dark */
-.cover {
-  --gold-light: rgba(255, 255, 255, 0.80);
-  --gold: rgba(255, 255, 255, 0.60);
+/* ── Cover text adjustments for dark background ── */
+.cover__subtitle, .cover__amp, .cover__date, .cover__guest-label {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
-
-/* ── Cards: dark overrides (vars handle bg/border/shadow) ── */
-/* ── Countdown: inherits from glass vars ── */
-
-/* ── RSVP: inherits from glass vars ── */
-
-/* ── Couple card: deeper overlay ── */
-/* ── Fixed elements: inherit from glass vars ── */
-
-/* ── Event card dark overrides ── */
-/* ── Cover text: light mode pakai warna gelap (biar kontras di panel glass krem),
-   dark mode biarkan default putih (cocok di atas panel hitam) ── */
-.cover__subtitle {
-  color: rgba(30, 20, 10, 0.65) !important;
-}
-
-.cover__amp {
-  color: rgba(30, 20, 10, 0.40) !important;
-}
-
-.cover__date {
-  color: rgba(30, 20, 10, 0.55) !important;
-}
-
-.cover__guest-label {
-  color: rgba(30, 20, 10, 0.50) !important;
-}
-
-.cover__names {
-  color: rgba(15, 10, 5, 0.90) !important;
-  text-shadow: 0 1px 6px rgba(255,255,255,0.15);
-}
-
-.cover__guest-name {
-  color: rgba(15, 10, 5, 0.88) !important;
-}
-
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  background: #ede8e3;
-  background-image:
-    radial-gradient(ellipse at 30% 20%, rgba(210, 190, 170, 0.40) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 75%, rgba(190, 180, 200, 0.30) 0%, transparent 60%);
-  background-attachment: fixed;
-  color: var(--gray-900);
-  line-height: 1.6;
-  overflow-x: hidden;
-  overscroll-behavior-y: none;
-  -webkit-overflow-scrolling: touch;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: 100px;
+.cover__names, .cover__guest-name {
+  color: var(--white) !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 /* ── Typography System ── */
@@ -215,9 +127,9 @@ main::before {
   content: '';
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 30%, rgba(210, 195, 178, 0.30) 0%, transparent 100%),
-    radial-gradient(ellipse 70% 45% at 50% 70%, rgba(185, 180, 195, 0.22) 0%, transparent 100%);
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 168, 204, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(0, 31, 92, 0.2) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }
@@ -369,81 +281,141 @@ main section > .container > * {
 /* Hero Photo Card — matches .couple-card */
 .hero__card {
   position: relative;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  width: 100%;
+  aspect-ratio: 4 / 5;
   background: var(--glass-bg);
   border: 0.5px solid var(--glass-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--glass-shadow-ring), var(--glass-inner-strong);
-  transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
-}
-
-@media (hover: hover) {
-  .hero__card:hover {
-    transform: translateY(-2px);
-  }
-}
-
-.hero__card:active {
-  transform: scale(0.97);
-  transition: transform 0.1s ease;
+  border-radius: 42px; /* Large premium rounding like the reference */
+  overflow: hidden;
+  box-shadow: 
+    0 30px 60px -12px rgba(0,0,0,0.25),
+    var(--glass-shadow-ring),
+    var(--glass-inner-strong);
+  transition: transform 0.4s var(--spring-smooth), box-shadow 0.4s var(--spring-smooth);
+  display: flex;
+  flex-direction: column;
 }
 
 .hero__card-photo {
   position: absolute;
   inset: 0;
-  background: var(--gray-200);
   z-index: 0;
+  overflow: hidden;
 }
 
-.hero__card-overlay {
+/* Floating Badge in top right */
+.hero__badge {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.82) 0%,
-    rgba(0, 0, 0, 0.55) 30%,
-    rgba(0, 0, 0, 0.15) 55%,
-    transparent 100%
-  );
-  z-index: 1;
-  pointer-events: none;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px) saturate(1.8);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 100px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+.hero__badge svg {
+  width: 14px;
+  height: 14px;
+  color: #ff3b30; /* Red heart style */
+}
+
+.hero__badge span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
+
+/* Bottom Glass Panel (Blue Discovery Style) */
 .hero__card-info {
   position: relative;
-  z-index: 2;
-  padding: 32px 24px;
-  text-align: center;
+  margin-top: auto;
+  z-index: 5;
+  padding: 24px 28px 32px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 31, 92, 0.3) 0%,
+    rgba(0, 31, 92, 0.6) 100%
+  );
+  backdrop-filter: blur(25px) saturate(1.8);
+  -webkit-backdrop-filter: blur(25px) saturate(1.8);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.2);
 }
 
-.hero__card-divider {
-  width: 28px;
-  height: 1px;
-  background: var(--gold-muted);
-  margin: 0 auto 12px;
+.hero__info-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
 }
 
 .hero__card-names {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(1.15rem, 3.8vw, 1.4rem);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
   font-weight: 400;
-  font-style: italic;
   color: var(--white);
-  letter-spacing: 0.01em;
-  line-height: 1.3;
   margin-bottom: 4px;
 }
 
-.hero__card-date {
-  font-size: 0.75rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 0.1em;
-  line-height: 1.7;
+.hero__info-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hero__info-location svg {
+  width: 14px;
+  height: 14px;
+}
+
+.hero__info-location span {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.hero__info-status .status-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #34c759; /* Green price style like reference */
+}
+
+.hero__info-divider {
+  height: 0.5px;
+  background: rgba(255, 255, 255, 0.2);
+  margin-bottom: 20px;
+}
+
+.hero__info-stats {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.hero__stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--white);
+}
+
+.hero__stat svg {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
+}
+
+.hero__stat span {
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 /* ══════════════════════════════════════
@@ -633,113 +605,48 @@ main section > .container > * {
 
 .couple-card {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   background: var(--glass-bg);
   border: 0.5px solid var(--glass-border);
-  border-radius: var(--radius-card);
+  border-radius: 32px;
   box-shadow: var(--glass-shadow-ring), var(--glass-inner-strong);
   transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
 }
 
-@media (hover: hover) {
-  .couple-card:hover {
-    transform: translateY(-2px);
-  }
-}
-
-.couple-card:active {
-  transform: scale(0.97);
-  transition: transform 0.1s ease;
-}
-
-/* Full portrait photo background */
 .couple-card__photo {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
   z-index: 0;
 }
 
-/* — Couple separator: line + & + line — */
-.couple__separator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin: 28px 0;
-}
-.couple__separator-line {
-  width: 32px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold-light));
-  opacity: 0.4;
-}
-.couple__separator-line:last-child {
-  background: linear-gradient(90deg, var(--gold-light), transparent);
-}
-.couple__separator-symbol {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.6rem;
-  font-style: italic;
-  color: var(--gold-light);
-  font-weight: 400;
-  line-height: 1;
-}
-
-/* Bottom gradient overlay */
-.couple-card__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.82) 0%,
-    rgba(0, 0, 0, 0.55) 30%,
-    rgba(0, 0, 0, 0.15) 55%,
-    transparent 100%
-  );
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Info section at bottom */
+/* Discrete Blue Glass Panel for Couple Info */
 .couple-card__info {
   position: relative;
-  z-index: 2;
-  padding: 32px 24px;
-  text-align: left;
+  margin-top: auto;
+  z-index: 5;
+  padding: 20px 24px 24px;
+  background: rgba(0, 31, 92, 0.4);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.15);
 }
 
 .couple-card__name {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(1.15rem, 3.8vw, 1.4rem);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
   font-weight: 400;
-  font-style: italic;
-  letter-spacing: 0.01em;
-  line-height: 1.3;
-  margin-bottom: 16px;
   color: var(--white);
-}
-
-.couple-card__divider {
-  width: 28px;
-  height: 1px;
-  background: var(--gold-muted);
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .couple-card__parents {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
 }
 
 .couple-card__parents strong {
@@ -2369,9 +2276,9 @@ main section > .container > * {
   bottom: 0;
   z-index: 2000;
   background: 
-    linear-gradient(to bottom, rgba(236,230,223,0) 50%, #ece6df 75%),
+    linear-gradient(to bottom, rgba(0, 31, 92, 0) 50%, #001f5c 90%),
     url('../assets/images/cover/cover.jpg?v=real5') center 30% / cover no-repeat,
-    #ece6df;
+    #001f5c;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2384,17 +2291,16 @@ main section > .container > * {
               filter 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Animated mesh gradient — iOS 26 live feel */
+/* Animated mesh gradient — iOS 26 live feel (Discovery Blue version) */
 .cover::before {
   content: '';
   position: absolute;
   inset: -40%;
   display: block;
   background:
-    radial-gradient(ellipse at 25% 20%, rgba(210, 175, 140, 0.30) 0%, transparent 50%),
-    radial-gradient(ellipse at 75% 75%, rgba(155, 170, 205, 0.25) 0%, transparent 50%),
-    radial-gradient(ellipse at 55% 10%, rgba(195, 165, 185, 0.18) 0%, transparent 40%),
-    radial-gradient(ellipse at 30% 85%, rgba(180, 195, 160, 0.14) 0%, transparent 45%);
+    radial-gradient(circle at 25% 20%, rgba(0, 168, 204, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(0, 31, 92, 0.20) 0%, transparent 50%),
+    radial-gradient(circle at 55% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
   animation: meshShift 12s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
@@ -2406,8 +2312,8 @@ main section > .container > * {
   inset: -30%;
   display: block;
   background:
-    radial-gradient(ellipse at 65% 35%, rgba(210, 175, 140, 0.20) 0%, transparent 45%),
-    radial-gradient(ellipse at 20% 60%, rgba(155, 170, 205, 0.15) 0%, transparent 50%);
+    radial-gradient(circle at 65% 35%, rgba(0, 168, 204, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 20% 60%, rgba(0, 31, 92, 0.10) 0%, transparent 50%);
   animation: meshShift 16s ease-in-out 2s infinite alternate-reverse;
   pointer-events: none;
   z-index: 0;
