@@ -703,7 +703,6 @@
     if (!liveEl || !eventSection) return;
 
     var isVisible = false;
-    var musicToggleEl = document.getElementById('musicToggle');
 
     function checkScroll() {
       var rect = eventSection.getBoundingClientRect();
@@ -712,12 +711,10 @@
         isVisible = true;
         liveEl.classList.add('visible');
         liveEl.classList.remove('hidden');
-        if (musicToggleEl) musicToggleEl.classList.add('shifted');
       } else if (!shouldShow && isVisible) {
         isVisible = false;
         liveEl.classList.remove('visible');
         liveEl.classList.add('hidden');
-        if (musicToggleEl) musicToggleEl.classList.remove('shifted');
       }
     }
 
