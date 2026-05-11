@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/style.css?v=20260322c">
+  <link rel="stylesheet" href="css/style.css?v=20260322k">
   <noscript><style>.reveal{opacity:1;transform:none;}</style></noscript>
 </head>
 <body>
@@ -70,36 +70,26 @@
     <div class="cover__vignette" aria-hidden="true"></div>
 
     <div class="cover__content">
+      <!-- Identity Block -->
+      <p class="cover__subtitle">The Wedding of</p>
+      <h1 class="cover__names">Nova <span class="cover__amp">&amp;</span> Fathi</h1>
+      <p class="cover__date">Minggu, 02 Agustus 2026</p>
 
-
-      <!-- Glass Panel -->
-      <div class="cover__panel">
-        <!-- Identity Block -->
-        <p class="cover__subtitle">The Wedding of</p>
-        <h1 class="cover__names">Nova <span class="cover__amp">&amp;</span> Fathi</h1>
-        <p class="cover__date">Minggu, 02 Agustus 2026</p>
-
-        <!-- Divider -->
-        <div class="cover__divider" aria-hidden="true"></div>
-
-        <!-- Guest Notification -->
-        <div class="cover__guest">
-          <p class="cover__guest-label">Kepada Yth.</p>
-          <p class="cover__guest-name">Tamu Undangan</p>
-        </div>
-
-
-
-        <!-- CTA -->
-        <div class="cover__btn-wrap">
-          <button class="cover__btn" id="openInvitation" aria-label="Buka Undangan">
-            <span class="cover__btn-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-            </span>
-            <span class="cover__btn-text">Buka Undangan</span>
-          </button>
-        </div>
+      <!-- Guest Notification -->
+      <div class="cover__guest">
+        <p class="cover__guest-label">Kepada Yth.</p>
+        <p class="cover__guest-name">Tamu Undangan</p>
       </div>
+
+      <!-- CTA — Pulsing Envelope -->
+      <button class="cover__cta" id="openInvitation" aria-label="Buka Undangan">
+        <span class="cover__cta-ring cover__cta-ring--1" aria-hidden="true"></span>
+        <span class="cover__cta-ring cover__cta-ring--2" aria-hidden="true"></span>
+        <span class="cover__cta-ring cover__cta-ring--3" aria-hidden="true"></span>
+        <span class="cover__cta-core" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        </span>
+      </button>
     </div>
   </div>
 
@@ -339,13 +329,9 @@
                   <p class="event-card__venue-name">Masjid At-Taqwa</p>
                   <p class="event-card__venue-address">Jl. Raya Pasar Minggu No.15, RT.2/RW.5, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510</p>
                   <div class="venue-actions">
-                    <button class="map-action-pill" id="copyAddress" data-address="Masjid At-Taqwa, Jl. Raya Pasar Minggu No.15, RT.2/RW.5, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510" aria-label="Salin alamat">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"/></svg>
-                      <span>Salin</span>
-                    </button>
                     <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="map-action-pill">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
-                      <span>Rute</span>
+                      <span>Buka di Maps</span>
                     </a>
                   </div>
                 </div>
@@ -450,8 +436,7 @@
               <div class="rsvp__segment" id="rsvpSegment" role="radiogroup" aria-label="Konfirmasi kehadiran">
                 <div class="rsvp__segment-slider" id="segmentSlider"></div>
                 <button type="button" class="rsvp__segment-btn active" data-value="hadir" role="radio" aria-checked="true">Hadir</button>
-                <button type="button" class="rsvp__segment-btn" data-value="tidak" role="radio" aria-checked="false">Tidak</button>
-                <button type="button" class="rsvp__segment-btn" data-value="ragu" role="radio" aria-checked="false">Ragu</button>
+                <button type="button" class="rsvp__segment-btn" data-value="tidak" role="radio" aria-checked="false">Tidak Hadir</button>
               </div>
             </div>
             <!-- Row: Ucapan -->
@@ -672,6 +657,6 @@
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SCRIPTS
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-  <script src="js/script.js?v=20260321b"></script>
+  <script src="js/script.js?v=20260322h"></script>
 </body>
 </html>

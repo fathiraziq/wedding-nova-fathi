@@ -150,17 +150,54 @@
   });
   openBtn.focus();
 
+  // ── Character splitter — wraps each letter in a span for stagger reveal ──
+  function splitToChars(el) {
+    if (!el || el.dataset.charSplit) return;
+    el.dataset.charSplit = '1';
+    var text = el.textContent;
+    el.textContent = '';
+    for (var i = 0; i < text.length; i++) {
+      var ch = text.charAt(i);
+      var span = document.createElement('span');
+      if (ch === ' ') {
+        span.className = 'char-reveal char-reveal--space';
+        span.innerHTML = '&nbsp;';
+      } else {
+        span.className = 'char-reveal';
+        span.textContent = ch;
+      }
+      span.style.transitionDelay = (i * 0.035) + 's';
+      el.appendChild(span);
+    }
+  }
+
+  function revealCharsIn(container) {
+    var chars = container.querySelectorAll('.char-reveal');
+    for (var i = 0; i < chars.length; i++) {
+      chars[i].classList.add('char-reveal--visible');
+    }
+  }
+
   // ── Scroll Reveal ──
   function initReveal() {
+    // Split all section titles into chars first
+    if (!prefersReducedMotion) {
+      document.querySelectorAll('.text-section-title, .hero__header-title').forEach(splitToChars);
+    }
+
     var reveals = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .reveal-scale-up');
     if (!('IntersectionObserver' in window)) {
-      reveals.forEach(function (el) { el.classList.add('visible'); });
+      reveals.forEach(function (el) {
+        el.classList.add('visible');
+        revealCharsIn(el);
+      });
       return;
     }
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          revealCharsIn(entry.target);
           observer.unobserve(entry.target);
         }
       });
@@ -174,6 +211,42 @@
     });
   }
 
+  // ── Cover pointer parallax tilt (desktop only) ──
+  if (!prefersReducedMotion && !isMobile) {
+    var coverContent = cover.querySelector('.cover__content');
+    if (coverContent) {
+      var tiltCurX = 0, tiltCurY = 0, tiltTargetX = 0, tiltTargetY = 0;
+      var tiltRaf = null;
+
+      function tiltLoop() {
+        tiltCurX += (tiltTargetX - tiltCurX) * 0.10;
+        tiltCurY += (tiltTargetY - tiltCurY) * 0.10;
+        coverContent.style.setProperty('--cover-tx', tiltCurX.toFixed(2));
+        coverContent.style.setProperty('--cover-ty', tiltCurY.toFixed(2));
+        if (Math.abs(tiltTargetX - tiltCurX) > 0.05 || Math.abs(tiltTargetY - tiltCurY) > 0.05) {
+          tiltRaf = requestAnimationFrame(tiltLoop);
+        } else {
+          tiltRaf = null;
+        }
+      }
+
+      cover.addEventListener('pointermove', function (e) {
+        var rect = cover.getBoundingClientRect();
+        var cx = rect.width / 2;
+        var cy = rect.height / 2;
+        tiltTargetX = ((e.clientX - rect.left - cx) / cx) * -7;
+        tiltTargetY = ((e.clientY - rect.top - cy) / cy) * -7;
+        if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop);
+      });
+
+      cover.addEventListener('pointerleave', function () {
+        tiltTargetX = 0;
+        tiltTargetY = 0;
+        if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop);
+      });
+    }
+  }
+
   // ── Active Nav Tracking ──
   const sections = document.querySelectorAll('section[id]');
   const navItems = document.querySelectorAll('.floating-nav__item');
@@ -183,26 +256,38 @@
   var lastActiveId = navSectionIds[0] || '';
 
   function updateActiveNav() {
-    var scrollY = window.scrollY + window.innerHeight / 2;
     var currentId = '';
 
-    sections.forEach(function (section) {
-      var top = section.offsetTop;
-      var bottom = top + section.offsetHeight;
-      if (scrollY >= top && scrollY < bottom) {
-        currentId = section.getAttribute('id');
-      }
-    });
-
-    // If current section has no nav item, keep the last active one
-    if (currentId && navSectionIds.indexOf(currentId) === -1) {
-      currentId = lastActiveId;
+    // Top of page → home active
+    if (window.scrollY < 80) {
+      currentId = navSectionIds[0];
+    } else {
+      // Find nav section closest to scroll position (top quarter of viewport)
+      var probe = window.scrollY + window.innerHeight * 0.28;
+      var bestId = '';
+      var bestDist = Infinity;
+      sections.forEach(function (section) {
+        var id = section.getAttribute('id');
+        if (navSectionIds.indexOf(id) === -1) return; // only nav sections
+        var top = section.offsetTop;
+        var bottom = top + section.offsetHeight;
+        if (probe >= top && probe < bottom) {
+          // probe inside this section — pick immediately
+          bestId = id;
+          bestDist = 0;
+        } else if (bestDist > 0) {
+          var dist = Math.min(Math.abs(probe - top), Math.abs(probe - bottom));
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestId = id;
+          }
+        }
+      });
+      currentId = bestId || lastActiveId;
     }
+
     if (currentId && navSectionIds.indexOf(currentId) !== -1) {
       lastActiveId = currentId;
-    }
-    if (!currentId) {
-      currentId = lastActiveId;
     }
 
     navItems.forEach(function (item) {
@@ -242,6 +327,13 @@
       e.preventDefault();
       var targetId = this.getAttribute('href').substring(1);
       var target = document.getElementById(targetId);
+
+      // Immediately set active state + move pill (don't wait for scroll)
+      navItems.forEach(function (n) { n.classList.remove('active'); });
+      this.classList.add('active');
+      lastActiveId = this.getAttribute('data-section');
+      navUpdateCallbacks.forEach(function (cb) { cb(); });
+
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
