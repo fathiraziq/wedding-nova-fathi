@@ -264,6 +264,21 @@
   navItems.forEach(function(item) { navSectionIds.push(item.getAttribute('data-section')); });
   var navUpdateCallbacks = [];
   var lastActiveId = navSectionIds[0] || '';
+  var navSections = [];
+
+  function refreshNavSections() {
+    navSections = [];
+    sections.forEach(function (section) {
+      var id = section.getAttribute('id');
+      if (navSectionIds.indexOf(id) === -1) return;
+      var top = section.offsetTop;
+      navSections.push({
+        id: id,
+        top: top,
+        bottom: top + section.offsetHeight
+      });
+    });
+  }
 
   function updateActiveNav() {
     var currentId = '';
@@ -276,29 +291,24 @@
       var probe = window.scrollY + window.innerHeight * 0.28;
       var bestId = '';
       var bestDist = Infinity;
-      sections.forEach(function (section) {
-        var id = section.getAttribute('id');
-        if (navSectionIds.indexOf(id) === -1) return; // only nav sections
-        var top = section.offsetTop;
-        var bottom = top + section.offsetHeight;
-        if (probe >= top && probe < bottom) {
+      navSections.forEach(function (section) {
+        if (probe >= section.top && probe < section.bottom) {
           // probe inside this section — pick immediately
-          bestId = id;
+          bestId = section.id;
           bestDist = 0;
         } else if (bestDist > 0) {
-          var dist = Math.min(Math.abs(probe - top), Math.abs(probe - bottom));
+          var dist = Math.min(Math.abs(probe - section.top), Math.abs(probe - section.bottom));
           if (dist < bestDist) {
             bestDist = dist;
-            bestId = id;
+            bestId = section.id;
           }
         }
       });
       currentId = bestId || lastActiveId;
     }
 
-    if (currentId && navSectionIds.indexOf(currentId) !== -1) {
-      lastActiveId = currentId;
-    }
+    if (!currentId || navSectionIds.indexOf(currentId) === -1 || currentId === lastActiveId) return;
+    lastActiveId = currentId;
 
     navItems.forEach(function (item) {
       item.classList.remove('active');
@@ -311,6 +321,10 @@
   }
 
   // ── Unified Scroll Handler (single rAF for all scroll work) ──
+  refreshNavSections();
+  window.addEventListener('resize', refreshNavSections, { passive: true });
+  window.addEventListener('load', refreshNavSections);
+
   var scrollCallbacks = [];
   var scrollTicking = false;
 
@@ -855,8 +869,27 @@
       }
     }
 
-    scrollCallbacks.push(checkScroll);
-    checkScroll();
+    if ('IntersectionObserver' in window) {
+      var liveObserver = new IntersectionObserver(function(entries) {
+        var shouldShow = entries[0] && entries[0].isIntersecting;
+        if (shouldShow && !isVisible) {
+          isVisible = true;
+          liveEl.classList.add('visible');
+          liveEl.classList.remove('hidden');
+        } else if (!shouldShow && isVisible) {
+          isVisible = false;
+          liveEl.classList.remove('visible');
+          liveEl.classList.add('hidden');
+        }
+      }, {
+        threshold: 0,
+        rootMargin: '-50% 0px 0px 0px'
+      });
+      liveObserver.observe(eventSection);
+    } else {
+      scrollCallbacks.push(checkScroll);
+      checkScroll();
+    }
   })();
 
   // ── Gallery Lightbox (iOS-style) + Carousel Dots ──
@@ -882,7 +915,10 @@
 
       var dots = dotsContainer.querySelectorAll('.gallery__dot');
 
+      var galleryScrollTicking = false;
       carousel.addEventListener('scroll', function() {
+        if (galleryScrollTicking) return;
+        galleryScrollTicking = true;
         requestAnimationFrame(function() {
           var scrollLeft = carousel.scrollLeft;
           var itemWidth = items[0].offsetWidth + 12; // gap
@@ -896,6 +932,7 @@
               dot.removeAttribute('aria-current');
             }
           });
+          galleryScrollTicking = false;
         });
       }, { passive: true });
     }
@@ -1046,7 +1083,10 @@
 
     var dots = dotsContainer.querySelectorAll('.story__dot');
 
+    var storyScrollTicking = false;
     carousel.addEventListener('scroll', function() {
+      if (storyScrollTicking) return;
+      storyScrollTicking = true;
       requestAnimationFrame(function() {
         var scrollLeft = carousel.scrollLeft;
         var itemWidth = cards[0].offsetWidth + 12;
@@ -1060,6 +1100,7 @@
             dot.removeAttribute('aria-current');
           }
         });
+        storyScrollTicking = false;
       });
     }, { passive: true });
   })();
@@ -1277,10 +1318,12 @@
       });
     }
 
-    scrollCallbacks.push(updateTilt);
+    if (!isMobile && !prefersReducedMotion) {
+      scrollCallbacks.push(updateTilt);
+    }
 
     // Gyroscope tilt on mobile — throttled to ~30fps
-    if (window.DeviceOrientationEvent) {
+    if (!isMobile && !prefersReducedMotion && window.DeviceOrientationEvent) {
       var gyroCards = document.querySelectorAll('.couple-card, .hero__card');
       var lastBeta = 0, lastGamma = 0;
       var gyroRafId = null;

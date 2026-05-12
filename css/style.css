@@ -3377,6 +3377,11 @@ button:not(:disabled):active,
     display: none;
   }
 
+  .parallax-orb {
+    animation: none;
+    opacity: 0.28;
+  }
+
   /* Reduce lightbox close button blur */
   .lightbox-close {
     backdrop-filter: blur(12px);
@@ -3414,6 +3419,48 @@ button:not(:disabled):active,
   .music-toggle {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+  }
+
+  main section > .container {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    animation: none;
+    background: rgba(255, 252, 245, 0.78);
+    box-shadow:
+      0 8px 24px rgba(40, 30, 15, 0.08),
+      var(--glass-inner);
+  }
+
+  main section > .container::before,
+  main section > .container::after,
+  .hero__card::after,
+  .couple-card::after {
+    display: none;
+    animation: none;
+  }
+
+  .hero__card-photo img,
+  .couple-card__photo img,
+  .cover__cta-core {
+    animation: none;
+  }
+
+  .hero__card-photo img,
+  .couple-card__photo img,
+  .cover__content,
+  .hero__card,
+  .couple-card,
+  .event-card,
+  .gift-card,
+  .parallax-orb {
+    will-change: auto;
+  }
+
+  .floating-nav,
+  .music-toggle {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 252, 245, 0.86);
   }
 }
 
