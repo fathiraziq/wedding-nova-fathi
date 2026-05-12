@@ -2399,7 +2399,7 @@ main section > .container > * {
   z-index: 2000;
   background: 
     linear-gradient(to bottom, rgba(250, 246, 240, 0) 50%, #faf6f0 90%),
-    url('../assets/images/cover/cover.jpg?v=photos1') center 20% / cover no-repeat,
+    url('../assets/images/cover/cover.jpg?v=photos2') center 20% / cover no-repeat,
     #faf6f0;
   display: flex;
   flex-direction: column;
@@ -2977,7 +2977,7 @@ main section > .container > * {
        Center 80% pushes the image upwards, safely cropping the cafe ceiling and moving heads to the top edge */
     background:
       linear-gradient(to bottom, rgba(250,246,240,0) 50%, #faf6f0 85%),
-      url('../assets/images/cover/cover.jpg?v=photos1') 57% 78% / auto 112% no-repeat, #faf6f0 !important;
+      url('../assets/images/cover/cover.jpg?v=photos2') 45% 78% / auto 112% no-repeat, #faf6f0 !important;
   }
 
   .cover__names {

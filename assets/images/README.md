@@ -21,7 +21,7 @@ assets/images/
 | Hero | `hero/couple.jpg` | 1084 x 1354 |
 | Bride | `couple/bride.jpeg` | 1134 x 1418 |
 | Groom | `couple/groom.jpeg` | 1134 x 1418 |
-| Gallery | `gallery/1.jpg` to `gallery/17.jpg` | 3:4 portrait assets |
+| Gallery | `gallery/1.jpg` to `gallery/16.jpg` | 3:4 portrait assets, alternating adat/jas |
 
 ## Notes
 
