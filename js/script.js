@@ -15,14 +15,21 @@
   const musicToggle = document.getElementById('musicToggle');
   bgMusic.volume = 0.4;
 
+  function setMusicButtonState(isPlaying) {
+    musicToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+    musicToggle.setAttribute('aria-label', isPlaying ? 'Jeda musik' : 'Putar musik');
+    musicToggle.setAttribute('title', isPlaying ? 'Jeda musik' : 'Putar musik');
+  }
+
   function playMusic() {
     bgMusic.play().then(function () {
       musicToggle.classList.remove('paused');
       musicToggle.classList.add('playing');
+      setMusicButtonState(true);
     }).catch(function () {
       musicToggle.classList.add('paused');
       musicToggle.classList.remove('playing');
-      musicToggle.setAttribute('title', 'Tap untuk putar musik');
+      setMusicButtonState(false);
     });
   }
 
@@ -30,7 +37,10 @@
     bgMusic.pause();
     musicToggle.classList.add('paused');
     musicToggle.classList.remove('playing');
+    setMusicButtonState(false);
   }
+
+  setMusicButtonState(false);
 
   musicToggle.addEventListener('click', function () {
     if (bgMusic.paused) {
@@ -366,6 +376,7 @@
   var rsvpForm = document.getElementById('rsvpForm');
   var rsvpSuccess = document.getElementById('rsvpSuccess');
   var rsvpAnother = document.getElementById('rsvpAnother');
+  var rsvpFeedback = document.getElementById('rsvpFeedback');
   var wishesList = document.getElementById('wishesList');
   var wishesEmpty = document.getElementById('wishesEmpty');
   var wishesCount = document.getElementById('wishesCount');
@@ -564,11 +575,25 @@
     rsvpSuccess.style.display = 'block';
   }
 
+  function setRsvpFeedback(type, message) {
+    if (!rsvpFeedback) return;
+    rsvpFeedback.textContent = message || '';
+    rsvpFeedback.className = 'rsvp__feedback';
+    if (message) {
+      rsvpFeedback.classList.add('is-visible', type === 'success' ? 'is-success' : 'is-error');
+    }
+  }
+
+  function clearRsvpFeedback() {
+    setRsvpFeedback('', '');
+  }
+
   // ── Back to form ──
   rsvpAnother.addEventListener('click', function() {
     rsvpSuccess.style.display = 'none';
     rsvpForm.style.display = 'flex';
     rsvpForm.reset();
+    clearRsvpFeedback();
     attendInput.value = 'hadir';
     segmentBtns.forEach(function(b) {
       b.classList.remove('active');
@@ -582,6 +607,18 @@
     }
   });
 
+  var rsvpNameField = document.getElementById('rsvp-name');
+  if (rsvpNameField) {
+    rsvpNameField.addEventListener('input', function() {
+      var errorEl = document.getElementById('rsvpNameError');
+      rsvpNameField.style.outline = '';
+      if (errorEl) {
+        errorEl.classList.remove('rsvp__error--visible');
+      }
+      clearRsvpFeedback();
+    });
+  }
+
   rsvpForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var nameInput = document.getElementById('rsvp-name');
@@ -590,6 +627,7 @@
     var submitText = submitBtn.querySelector('.rsvp__submit-text');
     var name = nameInput.value.trim();
     var message = messageInput.value.trim();
+    clearRsvpFeedback();
 
     if (!name || !attendInput.value) {
       if (!name) {
@@ -599,6 +637,7 @@
           errorEl.textContent = 'Nama wajib diisi';
           errorEl.classList.add('rsvp__error--visible');
         }
+        setRsvpFeedback('error', 'Isi nama dulu supaya konfirmasi bisa dikirim.');
         setTimeout(function() {
           nameInput.style.outline = '';
           if (errorEl) {
@@ -621,17 +660,23 @@
         if (submitText) submitText.textContent = 'Kirim Konfirmasi';
 
         if (!res.ok) {
-          return res.text().then(function(t) { console.error('RSVP error:', res.status, t); });
+          return res.text().then(function(t) {
+            console.error('RSVP error:', res.status, t);
+            setRsvpFeedback('error', 'Maaf, konfirmasi belum terkirim. Coba lagi sebentar ya.');
+          });
         }
 
+        clearRsvpFeedback();
         showSuccess();
         if (message) {
+          showFloatingThankYou();
           loadWishes();
         }
       })
       .catch(function(err) {
         submitBtn.disabled = false;
         if (submitText) submitText.textContent = 'Kirim Konfirmasi';
+        setRsvpFeedback('error', 'Koneksi sedang bermasalah. Coba kirim lagi sebentar ya.');
         console.error('Network error:', err);
       });
   });
@@ -824,8 +869,14 @@
     // Create page indicator dots
     if (dotsContainer && carousel) {
       items.forEach(function(_, i) {
-        var dot = document.createElement('span');
+        var dot = document.createElement('button');
+        dot.type = 'button';
         dot.className = 'gallery__dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Lihat foto ' + (i + 1));
+        if (i === 0) dot.setAttribute('aria-current', 'true');
+        dot.addEventListener('click', function() {
+          items[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        });
         dotsContainer.appendChild(dot);
       });
 
@@ -839,6 +890,11 @@
           activeIndex = Math.max(0, Math.min(activeIndex, items.length - 1));
           dots.forEach(function(dot, i) {
             dot.classList.toggle('active', i === activeIndex);
+            if (i === activeIndex) {
+              dot.setAttribute('aria-current', 'true');
+            } else {
+              dot.removeAttribute('aria-current');
+            }
           });
         });
       }, { passive: true });
@@ -852,6 +908,7 @@
     overlay.setAttribute('aria-label', 'Galeri foto');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.appendChild(overlay);
+    var lastFocusedEl = null;
 
     var img = document.createElement('img');
     img.className = 'lightbox-img';
@@ -864,22 +921,42 @@
     closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
     overlay.appendChild(closeBtn);
 
-    function openLightbox(src) {
+    function openLightbox(src, altText) {
       if (!src) return;
+      lastFocusedEl = document.activeElement;
       img.src = src;
+      img.alt = altText || 'Foto galeri';
       overlay.classList.add('lightbox-overlay--show');
+      overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function() { closeBtn.focus(); });
     }
 
     function closeLightbox() {
       overlay.classList.remove('lightbox-overlay--show');
+      overlay.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      if (lastFocusedEl && lastFocusedEl.focus) {
+        lastFocusedEl.focus();
+      }
     }
 
-    items.forEach(function(item) {
-      item.addEventListener('click', function() {
+    items.forEach(function(item, i) {
+      item.setAttribute('role', 'button');
+      item.setAttribute('tabindex', '0');
+      item.setAttribute('aria-label', 'Buka foto galeri ' + (i + 1));
+
+      function openFromItem() {
         var photo = item.querySelector('img');
-        if (photo) openLightbox(photo.src);
+        if (photo) openLightbox(photo.src, photo.alt);
+      }
+
+      item.addEventListener('click', openFromItem);
+      item.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openFromItem();
+        }
       });
     });
 
@@ -888,7 +965,7 @@
       if (e.target === overlay) closeLightbox();
     });
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'Escape' && overlay.classList.contains('lightbox-overlay--show')) closeLightbox();
     });
   })();
 
@@ -956,8 +1033,14 @@
     if (!carousel || !dotsContainer || !cards.length) return;
 
     cards.forEach(function(_, i) {
-      var dot = document.createElement('span');
+      var dot = document.createElement('button');
+      dot.type = 'button';
       dot.className = 'story__dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Lihat cerita ' + (i + 1));
+      if (i === 0) dot.setAttribute('aria-current', 'true');
+      dot.addEventListener('click', function() {
+        cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      });
       dotsContainer.appendChild(dot);
     });
 
@@ -971,6 +1054,11 @@
         activeIndex = Math.max(0, Math.min(activeIndex, cards.length - 1));
         dots.forEach(function(dot, i) {
           dot.classList.toggle('active', i === activeIndex);
+          if (i === activeIndex) {
+            dot.setAttribute('aria-current', 'true');
+          } else {
+            dot.removeAttribute('aria-current');
+          }
         });
       });
     }, { passive: true });

@@ -82,12 +82,17 @@
       </div>
 
       <!-- CTA — Pulsing Envelope -->
-      <button class="cover__cta" id="openInvitation" aria-label="Buka Undangan">
+      <button class="cover__cta" id="openInvitation" aria-label="Buka Undangan Nova dan Fathi">
         <span class="cover__cta-ring cover__cta-ring--1" aria-hidden="true"></span>
         <span class="cover__cta-ring cover__cta-ring--2" aria-hidden="true"></span>
         <span class="cover__cta-ring cover__cta-ring--3" aria-hidden="true"></span>
-        <span class="cover__cta-core" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        <span class="cover__cta-core">
+          <span class="cover__cta-copy">
+            <span class="cover__cta-title">Buka Undangan</span>
+          </span>
+          <span class="cover__cta-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+          </span>
         </span>
       </button>
     </div>
@@ -270,7 +275,7 @@
             <p class="story-card__desc">Insya Allah, di hari ini kami menyempurnakan separuh agama kami. Sebuah awal baru yang kami tunggu-tunggu, dengan penuh syukur dan harapan.</p>
           </div>
         </div>
-        <div class="story__dots" aria-hidden="true"></div>      </div>    </section>
+        <div class="story__dots" role="group" aria-label="Navigasi cerita"></div>      </div>    </section>
 
 
     <!-- ══ EVENT / ACARA ══ -->
@@ -407,7 +412,7 @@
             <img src="assets/images/gallery/17.jpg" alt="Gallery Photo 17" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
         </div>
-        <div class="gallery__dots" aria-hidden="true"></div>
+        <div class="gallery__dots" role="group" aria-label="Navigasi galeri"></div>
       </div>
     </section>
 
@@ -452,6 +457,7 @@
             </span>
             <span class="rsvp__submit-text">Kirim Konfirmasi</span>
           </button>
+          <p class="rsvp__feedback" id="rsvpFeedback" role="status" aria-live="polite"></p>
         </form>
 
         <!-- Success State -->
@@ -626,7 +632,7 @@
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
 
-  <audio id="bgMusic" loop preload="auto">
+  <audio id="bgMusic" loop preload="metadata">
     <source src="assets/music/bg-music.mp3" type="audio/mpeg">
   </audio>
 

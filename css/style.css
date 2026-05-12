@@ -542,9 +542,9 @@ main section > .container > * {
 /* ── Countdown (Live Activity floating pill) ── */
 .live-activity {
   position: fixed;
-  top: max(20px, env(safe-area-inset-top, 20px));
+  bottom: calc(94px + env(safe-area-inset-bottom));
   left: 50%;
-  transform: translateX(-50%) translateY(-20px);
+  transform: translateX(-50%) translateY(16px);
   z-index: 1002;
   opacity: 0;
   pointer-events: none;
@@ -555,7 +555,14 @@ main section > .container > * {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
-  animation: liquidAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: liveActivityRise 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes liveActivityRise {
+  0%   { transform: translateX(-50%) translateY(18px) scaleX(0.82) scaleY(1.08); opacity: 0; }
+  45%  { transform: translateX(-50%) translateY(-3px) scaleX(1.04) scaleY(0.98); opacity: 1; }
+  72%  { transform: translateX(-50%) translateY(1px) scaleX(0.99) scaleY(1.01); }
+  100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
 }
 
 .live-activity__inner {
@@ -563,7 +570,7 @@ main section > .container > * {
   align-items: center;
   gap: 0;
   padding: 6px 6px 6px 14px;
-  background: var(--glass-bg);
+  background: rgba(255, 252, 245, 0.48);
   border: 0.5px solid var(--glass-border);
   border-radius: 100px;
   backdrop-filter: var(--blur-secondary);
@@ -1146,16 +1153,27 @@ main section > .container > * {
 }
 
 .gallery__dot {
+  appearance: none;
+  -webkit-appearance: none;
   width: 7px;
   height: 7px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: var(--gray-300);
+  cursor: pointer;
   transition: background 0.25s var(--spring-smooth), transform 0.25s var(--spring-bounce);
 }
 
 .gallery__dot.active {
   background: var(--gold);
   transform: scale(1.25);
+}
+
+.gallery__dot:focus-visible,
+.story__dot:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
 }
 
 /* ══════════════════════════════════════
@@ -1264,6 +1282,27 @@ main section > .container > * {
 .rsvp__row-input::placeholder {
   color: var(--gray-400);
   font-weight: 300;
+}
+
+.rsvp__error {
+  display: block;
+  height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  color: #b42318;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.2s ease, transform 0.2s ease, height 0.2s ease, margin 0.2s ease;
+}
+
+.rsvp__error--visible {
+  height: auto;
+  margin-top: 4px;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Focus: highlight the parent row, no outline clash */
@@ -1451,6 +1490,33 @@ main section > .container > * {
 }
 
 /* Icon circle — same as cover__btn-icon */
+.rsvp__feedback {
+  display: none;
+  margin: -4px 8px 0;
+  padding: 11px 14px;
+  border-radius: var(--radius-small);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.rsvp__feedback.is-visible {
+  display: block;
+}
+
+.rsvp__feedback.is-error {
+  color: #8a1f14;
+  background: rgba(255, 59, 48, 0.09);
+  border: 0.5px solid rgba(255, 59, 48, 0.20);
+}
+
+.rsvp__feedback.is-success {
+  color: #1f7a3f;
+  background: rgba(52, 199, 89, 0.10);
+  border: 0.5px solid rgba(52, 199, 89, 0.20);
+}
+
 .rsvp__submit-icon-wrap {
   display: flex;
   align-items: center;
@@ -1962,10 +2028,15 @@ main section > .container > * {
 }
 
 .story__dot {
+  appearance: none;
+  -webkit-appearance: none;
   width: 7px;
   height: 7px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: var(--gray-300);
+  cursor: pointer;
   transition: background 0.25s var(--spring-smooth), transform 0.25s var(--spring-bounce);
 }
 
@@ -2021,7 +2092,7 @@ main section > .container > * {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--glass-bg);
+  background: rgba(255, 252, 245, 0.32);
   border: 0.5px solid var(--glass-border);
   backdrop-filter: var(--blur-secondary);
   -webkit-backdrop-filter: var(--blur-secondary);
@@ -2094,13 +2165,14 @@ main section > .container > * {
   bottom: calc(24px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
+  width: min(calc(100vw - 16px), 372px);
   z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2px;
-  padding: 6px 8px;
-  background: var(--glass-bg);
+  gap: 0;
+  padding: 5px 6px;
+  background: rgba(255, 252, 245, 0.50);
   border: 0.5px solid var(--glass-border);
   border-radius: 100px;
   backdrop-filter: var(--blur-primary);
@@ -2119,10 +2191,13 @@ main section > .container > * {
 
 .floating-nav__item {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  gap: 2px;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 50px;
   border-radius: 50%;
   text-decoration: none;
   color: var(--gray-400);
@@ -2148,10 +2223,10 @@ main section > .container > * {
 /* Floating nav pill indicator (JS-driven sliding element) */
 .floating-nav__pill {
   position: absolute;
-  top: 6px;
+  top: 5px;
   left: 0;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: var(--glass-bg-elevated);
   border: 0.5px solid var(--glass-border);
@@ -2182,9 +2257,11 @@ main section > .container > * {
 }
 
 .floating-nav__item svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   transition: all 0.25s var(--spring-smooth);
+  position: relative;
+  z-index: 1;
 }
 
 .floating-nav__item.active svg {
@@ -2192,30 +2269,34 @@ main section > .container > * {
 }
 
 .floating-nav__label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+  position: relative;
+  z-index: 1;
+  display: block;
+  max-width: 100%;
+  color: currentColor;
+  font-size: 0.52rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
   overflow: hidden;
-  clip: rect(0,0,0,0);
-  border: 0;
+  text-overflow: ellipsis;
+  opacity: 0.78;
 }
 
 .floating-nav__item.active .floating-nav__label {
-  /* still hidden — sr-only for accessibility, inherits parent styles */
-  position: absolute;
+  position: relative;
+  opacity: 1;
 }
 
 @media (max-width: 480px) {
   .floating-nav {
-    gap: 1px;
-    padding: 5px 6px;
+    width: min(calc(100vw - 14px), 348px);
+    padding: 5px 5px;
   }
 
   .floating-nav__item {
-    width: 40px;
-    height: 40px;
+    height: 48px;
   }
 
   .floating-nav__pill {
@@ -2227,6 +2308,10 @@ main section > .container > * {
   .floating-nav__item svg {
     width: 18px;
     height: 18px;
+  }
+
+  .floating-nav__label {
+    font-size: 0.5rem;
   }
 }
 
@@ -2675,9 +2760,10 @@ main section > .container > * {
 /* ── CTA — Circular Pulsing Envelope ── */
 .cover__cta {
   position: relative;
-  width: 72px;
-  height: 72px;
-  margin-top: 32px;
+  width: min(100%, 292px);
+  min-height: 66px;
+  margin-top: 28px;
+  margin-bottom: 8px;
   background: transparent;
   border: 0;
   outline: none;
@@ -2686,12 +2772,27 @@ main section > .container > * {
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: stretch;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
   opacity: 0;
   animation: ctaReveal 0.5s var(--spring-smooth) 1s forwards;
   z-index: 1;
+}
+
+@media (prefers-contrast: more) {
+  .floating-nav,
+  .live-activity__inner,
+  .music-toggle {
+    background: rgba(255, 252, 245, 0.86);
+    border-color: rgba(92, 85, 74, 0.26);
+  }
+
+  .floating-nav__item,
+  .music-toggle,
+  .live-activity__label {
+    color: var(--gray-900);
+  }
 }
 
 .cover__cta:focus,
@@ -2705,33 +2806,82 @@ main section > .container > * {
 .cover__cta-core {
   position: relative;
   z-index: 3;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(255, 252, 245, 0.18);
+  width: 100%;
+  min-height: 66px;
+  border-radius: 100px;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.10) 42%, rgba(255,255,255,0.04) 100%),
+    rgba(255, 252, 245, 0.20);
+  border: 0.5px solid rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(24px) saturate(1.6);
   -webkit-backdrop-filter: blur(24px) saturate(1.6);
-  display: flex;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 46px;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  padding: 8px 10px;
   color: rgba(255, 255, 255, 0.92);
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.45),
-    0 4px 28px rgba(0, 0, 0, 0.22);
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.08),
+    0 10px 34px rgba(0, 0, 0, 0.24);
   transition: transform 0.3s var(--spring-bounce), background 0.3s ease;
 }
 
+.cover__cta-core::before {
+  content: '';
+  width: 46px;
+  height: 46px;
+}
+
+.cover__cta-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+.cover__cta-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 750;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.35);
+}
+
+.cover__cta-icon {
+  grid-column: 3;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(255, 252, 245, 0.22);
+  border: 0.5px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.42),
+    0 4px 16px rgba(0,0,0,0.14);
+}
+
 .cover__cta:active .cover__cta-core {
-  transform: scale(0.90);
+  transform: scale(0.97);
   transition: transform 0.1s ease;
   background: rgba(255, 252, 245, 0.28);
 }
 
 .cover__cta-ring {
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+  opacity: 1;
+  inset: 0;
+  width: auto;
+  height: auto;
+  border-radius: 100px;
   border: 1px solid rgba(255, 255, 255, 0.40);
   z-index: 1;
   animation: ctaPulse 2.6s ease-out infinite;
@@ -2744,10 +2894,10 @@ main section > .container > * {
 @keyframes ctaPulse {
   0% {
     transform: scale(1);
-    opacity: 0.65;
+    opacity: 0.48;
   }
   100% {
-    transform: scale(2.6);
+    transform: scaleX(1.08) scaleY(1.45);
     opacity: 0;
   }
 }
@@ -2864,15 +3014,31 @@ main section > .container > * {
 
   .cover__cta {
     margin-top: 22px;
-    width: 60px;
-    height: 60px;
+    margin-bottom: 4px;
+    width: min(100%, 268px);
+    min-height: 58px;
   }
 
-  .cover__cta-core,
-  .cover__cta-ring {
-    width: 52px;
-    height: 52px;
+  .cover__cta-core {
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    min-height: 58px;
+    padding: 7px 8px;
   }
+
+  .cover__cta-core::before {
+    width: 42px;
+    height: 42px;
+  }
+
+  .cover__cta-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .cover__cta-title {
+    font-size: 0.86rem;
+  }
+
 }
 
 /* ── Cover: layar sangat kecil (360px dan di bawah) ── */
@@ -2888,14 +3054,25 @@ main section > .container > * {
 
   .cover__cta {
     margin-top: 24px;
-    width: 62px;
-    height: 62px;
+    width: min(100%, 252px);
+    min-height: 56px;
   }
 
-  .cover__cta-core,
-  .cover__cta-ring {
-    width: 54px;
-    height: 54px;
+  .cover__cta-core {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    min-height: 56px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .cover__cta-core::before {
+    width: 40px;
+    height: 40px;
+  }
+
+  .cover__cta-icon {
+    width: 40px;
+    height: 40px;
   }
 }
 
@@ -2907,6 +3084,12 @@ main section > .container > * {
 
   main section > .container {
     background: rgba(250, 246, 240, 0.96);
+  }
+
+  .floating-nav,
+  .live-activity__inner,
+  .music-toggle {
+    background: rgba(250, 246, 240, 0.94);
   }
 }
 
@@ -2927,24 +3110,27 @@ main section > .container > * {
   }
 
   .floating-nav {
-    gap: 0;
-    padding: 3px 4px;
+    width: min(calc(100vw - 10px), 326px);
+    padding: 4px 4px;
   }
 
   .floating-nav__item {
-    width: 44px;
-    height: 44px;
+    height: 46px;
   }
 
   .floating-nav__pill {
-    top: 3px;
-    width: 44px;
-    height: 44px;
+    top: 4px;
+    width: 39px;
+    height: 39px;
   }
 
   .floating-nav__item svg {
     width: 17px;
     height: 17px;
+  }
+
+  .floating-nav__label {
+    font-size: 0.48rem;
   }
 
   .gift-card__number {
