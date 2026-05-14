@@ -1182,19 +1182,16 @@ main section > .container > * {
 /* === GALLERY SECTION === */
 .gallery__header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .gallery__carousel {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  overflow-y: visible;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 16px 24px 32px;
-  margin: 0 -24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  overflow: visible;
+  padding: 0;
+  margin: 0;
 }
 
 .gallery__carousel::-webkit-scrollbar {
@@ -1202,45 +1199,50 @@ main section > .container > * {
 }
 
 .gallery__item {
-  flex: 0 0 72%;
+  width: 100%;
+  min-width: 0;
   aspect-ratio: 3 / 4;
-  background: var(--glass-bg);
-  border: 0.5px solid var(--glass-border);
-  backdrop-filter: var(--blur-secondary);
-  -webkit-backdrop-filter: var(--blur-secondary);
-  border-radius: var(--radius-card);
+  background: rgba(255, 252, 245, 0.50);
+  border: 0.5px solid rgba(255, 255, 255, 0.32);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--glass-shadow-ring), var(--glass-inner-strong);
+  box-shadow:
+    0 12px 28px rgba(34, 26, 16, 0.08),
+    var(--glass-shadow-ring),
+    var(--glass-inner);
   transition: transform 0.35s var(--spring-smooth), box-shadow 0.35s var(--spring-smooth);
   cursor: pointer;
   contain: layout style;
-  scroll-snap-align: center;
 }
 
-.gallery__item:nth-child(4n + 1) {
-  flex-basis: 82%;
+.gallery__item:nth-child(5n + 1) {
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 5;
+  border-radius: 26px;
+}
+
+.gallery__item:nth-child(5n + 1)::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 38%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(13, 12, 10, 0.38), transparent);
+}
+
+.gallery__item:nth-child(5n + 2),
+.gallery__item:nth-child(5n + 4) {
   aspect-ratio: 4 / 5;
 }
 
-.gallery__item:nth-child(4n + 2) {
-  flex-basis: 62%;
+.gallery__item:nth-child(5n + 3),
+.gallery__item:nth-child(5n) {
   aspect-ratio: 3 / 4;
-  margin-top: 24px;
-}
-
-.gallery__item:nth-child(4n + 3) {
-  flex-basis: 74%;
-  aspect-ratio: 5 / 6;
-}
-
-.gallery__item:nth-child(4n) {
-  flex-basis: 58%;
-  aspect-ratio: 2 / 3;
-  margin-top: 42px;
 }
 
 .gallery__item:nth-child(odd) {
@@ -1251,11 +1253,11 @@ main section > .container > * {
 }
 
 .gallery__item:nth-child(even) {
-  border-color: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.28);
   box-shadow:
-    0 18px 36px rgba(18, 18, 18, 0.12),
+    0 12px 28px rgba(18, 18, 18, 0.10),
     var(--glass-shadow-ring),
-    var(--glass-inner-strong);
+    var(--glass-inner);
 }
 
 .gallery__item img {
@@ -1295,7 +1297,7 @@ main section > .container > * {
 
 /* Page indicator dots — UIPageControl */
 .gallery__dots {
-  display: flex;
+  display: none;
   justify-content: center;
   gap: 6px;
   padding-top: 8px;
