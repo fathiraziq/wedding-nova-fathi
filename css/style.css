@@ -3058,11 +3058,11 @@ main section > .container > * {
   letter-spacing: 0.01em;
 }
 
-/* ── CTA — Circular Pulsing Envelope ── */
+/* ── CTA — Glass Envelope ── */
 .cover__cta {
   position: relative;
-  width: min(100%, 292px);
-  min-height: 66px;
+  width: min(100%, 304px);
+  min-height: 68px;
   margin-top: 28px;
   margin-bottom: 8px;
   background: transparent;
@@ -3108,7 +3108,7 @@ main section > .container > * {
   position: relative;
   z-index: 3;
   width: 100%;
-  min-height: 66px;
+  min-height: 68px;
   border-radius: 100px;
   background:
     linear-gradient(160deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.10) 42%, rgba(255,255,255,0.04) 100%),
@@ -3146,10 +3146,10 @@ main section > .container > * {
 
 .cover__cta-title {
   font-family: 'Inter', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 750;
-  line-height: 1.15;
-  letter-spacing: 0.01em;
+  font-size: clamp(0.98rem, 3.8vw, 1.05rem);
+  font-weight: 820;
+  line-height: 1.1;
+  letter-spacing: 0.005em;
   color: #ffffff;
   text-shadow: 0 1px 10px rgba(0,0,0,0.35);
 }
@@ -3306,13 +3306,13 @@ main section > .container > * {
   .cover__cta {
     margin-top: 22px;
     margin-bottom: 4px;
-    width: min(100%, 268px);
-    min-height: 58px;
+    width: min(100%, 280px);
+    min-height: 60px;
   }
 
   .cover__cta-core {
     grid-template-columns: 42px minmax(0, 1fr) 42px;
-    min-height: 58px;
+    min-height: 60px;
     padding: 7px 8px;
   }
 
@@ -3327,7 +3327,7 @@ main section > .container > * {
   }
 
   .cover__cta-title {
-    font-size: 0.86rem;
+    font-size: 0.95rem;
   }
 
 }
@@ -3345,13 +3345,13 @@ main section > .container > * {
 
   .cover__cta {
     margin-top: 24px;
-    width: min(100%, 252px);
-    min-height: 56px;
+    width: min(100%, 262px);
+    min-height: 58px;
   }
 
   .cover__cta-core {
     grid-template-columns: 40px minmax(0, 1fr) 40px;
-    min-height: 56px;
+    min-height: 58px;
     padding-left: 8px;
     padding-right: 8px;
   }
@@ -3364,6 +3364,10 @@ main section > .container > * {
   .cover__cta-icon {
     width: 40px;
     height: 40px;
+  }
+
+  .cover__cta-title {
+    font-size: 0.92rem;
   }
 }
 
