@@ -68,6 +68,11 @@
 
     <!-- Vignette -->
     <div class="cover__vignette" aria-hidden="true"></div>
+    <div class="cover__cinema" aria-hidden="true">
+      <span class="cover__cinema-panel cover__cinema-panel--left"></span>
+      <span class="cover__cinema-panel cover__cinema-panel--right"></span>
+      <span class="cover__cinema-line"></span>
+    </div>
 
     <div class="cover__content">
       <!-- Identity Block -->
@@ -116,15 +121,22 @@
     <section class="hero" id="home">
       <div class="container">
         <div class="hero__header reveal">
-          <h2 class="hero__header-title">We're Getting Married</h2>
+          <p class="hero__eyebrow">The Wedding of</p>
+          <h2 class="hero__header-title">Nova &amp; Fathi</h2>
+          <p class="hero__lede">Minggu, 02 Agustus 2026</p>
         </div>
 
-        <!-- Photo Card (Reverted Layout) -->
+        <!-- Photo Card (Editorial Layout) -->
         <div class="hero__card reveal reveal-delay-1">
           <div class="hero__card-photo">
             <img src="assets/images/hero/couple.jpg" alt="Nova & Fathi" loading="eager" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div class="hero__card-overlay"></div>
+          <div class="hero__editorial-meta" aria-hidden="true">
+            <span>N</span>
+            <span>02.08</span>
+            <span>F</span>
+          </div>
           <div class="hero__card-info">
             <div class="hero__card-divider"></div>
             <p class="hero__card-names">Nova &amp; Fathi</p>
@@ -293,6 +305,13 @@
             <span class="event-card__weekday">Minggu</span>
             <span class="event-card__date-full">02 Agustus 2026</span>
           </div>
+          <div class="event-card__smart" id="weddingDayMode" aria-live="polite">
+            <div class="event-card__smart-copy">
+              <span class="event-card__smart-kicker" id="weddingStatusLabel">Mendekati hari H</span>
+              <span class="event-card__smart-text" id="weddingStatusText">Detail acara dan lokasi sudah siap.</span>
+            </div>
+            <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="event-card__smart-action">Maps</a>
+          </div>
 
           <!-- Schedule Group -->
           <div class="event-card__group">
@@ -420,6 +439,7 @@
         <div class="rsvp__header reveal">
           <h2 class="text-section-title">RSVP</h2>
           <p class="text-body" style="margin-top: 16px;">Mohon konfirmasi kehadiran Bapak/Ibu/Saudara/i melalui formulir berikut.</p>
+          <p class="rsvp__personal-note" id="rsvpPersonalNote">Kami tunggu kabar baiknya.</p>
         </div>
 
         <!-- Form wrapped in grouped card -->
@@ -459,11 +479,18 @@
 
         <!-- Success State -->
         <div class="rsvp__success" id="rsvpSuccess" style="display:none;">
+          <div class="rsvp__success-burst" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
           <div class="rsvp__success-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="32" height="32"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
           </div>
-          <p class="rsvp__success-title">Terkirim!</p>
-          <p class="rsvp__success-desc">Terima kasih atas konfirmasi dan doa Anda.</p>
+          <p class="rsvp__success-title" id="rsvpSuccessTitle">Terkirim!</p>
+          <p class="rsvp__success-desc" id="rsvpSuccessDesc">Terima kasih atas konfirmasi dan doa Anda.</p>
           <button class="rsvp__success-btn" id="rsvpAnother">Kirim Ucapan Lagi</button>
         </div>
 

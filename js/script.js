@@ -13,7 +13,9 @@
   // ── Background Music ──
   const bgMusic = document.getElementById('bgMusic');
   const musicToggle = document.getElementById('musicToggle');
-  bgMusic.volume = 0.4;
+  var musicTargetVolume = 0.42;
+  var musicFadeFrame = null;
+  bgMusic.volume = 0;
 
   function setMusicButtonState(isPlaying) {
     musicToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
@@ -21,11 +23,36 @@
     musicToggle.setAttribute('title', isPlaying ? 'Jeda musik' : 'Putar musik');
   }
 
+  function fadeMusicTo(target, onDone) {
+    if (musicFadeFrame) cancelAnimationFrame(musicFadeFrame);
+    var start = bgMusic.volume;
+    var startTime = null;
+    var duration = prefersReducedMotion ? 1 : 1200;
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      bgMusic.volume = start + (target - start) * eased;
+      if (progress < 1) {
+        musicFadeFrame = requestAnimationFrame(step);
+      } else {
+        bgMusic.volume = target;
+        musicFadeFrame = null;
+        if (onDone) onDone();
+      }
+    }
+
+    musicFadeFrame = requestAnimationFrame(step);
+  }
+
   function playMusic() {
+    bgMusic.volume = Math.min(bgMusic.volume, 0.08);
     bgMusic.play().then(function () {
       musicToggle.classList.remove('paused');
       musicToggle.classList.add('playing');
       setMusicButtonState(true);
+      fadeMusicTo(musicTargetVolume);
     }).catch(function () {
       musicToggle.classList.add('paused');
       musicToggle.classList.remove('playing');
@@ -34,10 +61,12 @@
   }
 
   function pauseMusic() {
-    bgMusic.pause();
     musicToggle.classList.add('paused');
     musicToggle.classList.remove('playing');
     setMusicButtonState(false);
+    fadeMusicTo(0, function() {
+      bgMusic.pause();
+    });
   }
 
   setMusicButtonState(false);
@@ -53,14 +82,18 @@
   // ── Guest Name from URL (?to=Nama+Tamu) ──
   var params = new URLSearchParams(window.location.search);
   var guestName = params.get('to');
+  var personalizedGuestName = '';
 
   if (guestName) {
     var decoded = decodeURIComponent(guestName).trim();
     if (decoded) {
+      personalizedGuestName = decoded;
       var guestEl = document.querySelector('.cover__guest-name');
       if (guestEl) guestEl.textContent = decoded;
       var rsvpInput = document.getElementById('rsvp-name');
       if (rsvpInput) rsvpInput.value = decoded;
+      var rsvpPersonalNote = document.getElementById('rsvpPersonalNote');
+      if (rsvpPersonalNote) rsvpPersonalNote.textContent = 'Kami tunggu kabar baiknya, ' + decoded + '.';
     }
   }
 
@@ -112,6 +145,7 @@
   }
 
   function showContent() {
+    document.body.classList.add('invitation-opened');
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.top = '';
@@ -123,24 +157,31 @@
     playMusic();
   }
 
+  var openingStarted = false;
   openBtn.addEventListener('click', function () {
-    // Hide cover, show loading
-    cover.classList.add('hidden');
-    loadingOverlay.classList.add('active');
+    if (openingStarted) return;
+    openingStarted = true;
+    openBtn.disabled = true;
+    cover.classList.add('is-opening');
 
-    preloadAssets(
-      function onProgress(pct) {
-        loadingBarFill.style.width = pct + '%';
-      },
-      function onDone() {
-        // Small delay so 100% is visible
-        setTimeout(function () {
-          loadingOverlay.classList.remove('active');
-          loadingOverlay.classList.add('fade-out');
-          showContent();
-        }, 400);
-      }
-    );
+    setTimeout(function() {
+      cover.classList.add('hidden');
+      loadingOverlay.classList.add('active');
+
+      preloadAssets(
+        function onProgress(pct) {
+          loadingBarFill.style.width = pct + '%';
+        },
+        function onDone() {
+          // Small delay so 100% is visible
+          setTimeout(function () {
+            loadingOverlay.classList.remove('active');
+            loadingOverlay.classList.add('fade-out');
+            showContent();
+          }, 360);
+        }
+      );
+    }, prefersReducedMotion ? 0 : 620);
   });
 
   // Lock scroll until cover is opened (iOS-safe)
@@ -584,7 +625,12 @@
   }
 
   // ── Show success, hide form ──
-  function showSuccess() {
+  function showSuccess(name) {
+    var cleanName = name || personalizedGuestName || 'Tamu Undangan';
+    var titleEl = document.getElementById('rsvpSuccessTitle');
+    var descEl = document.getElementById('rsvpSuccessDesc');
+    if (titleEl) titleEl.textContent = 'Terkirim, ' + cleanName + '!';
+    if (descEl) descEl.textContent = 'Terima kasih sudah mengirim konfirmasi. Doa dan kehadiranmu sangat berarti.';
     rsvpForm.style.display = 'none';
     rsvpSuccess.style.display = 'block';
   }
@@ -607,6 +653,10 @@
     rsvpSuccess.style.display = 'none';
     rsvpForm.style.display = 'flex';
     rsvpForm.reset();
+    if (personalizedGuestName) {
+      var namedInput = document.getElementById('rsvp-name');
+      if (namedInput) namedInput.value = personalizedGuestName;
+    }
     clearRsvpFeedback();
     attendInput.value = 'hadir';
     segmentBtns.forEach(function(b) {
@@ -681,7 +731,7 @@
         }
 
         clearRsvpFeedback();
-        showSuccess();
+        showSuccess(name);
         if (message) {
           showFloatingThankYou();
           loadWishes();
@@ -801,7 +851,43 @@
 
   // ── Countdown Timer ──
   var weddingDate = new Date('2026-08-02T07:00:00+07:00').getTime();
+  var weddingEndDate = new Date('2026-08-02T23:59:59+07:00').getTime();
+  var dayMs = 1000 * 60 * 60 * 24;
   var cdDays = document.getElementById('cdDays');
+  var liveLabel = document.querySelector('.live-activity__label');
+  var weddingStatusLabel = document.getElementById('weddingStatusLabel');
+  var weddingStatusText = document.getElementById('weddingStatusText');
+
+  function setWeddingMode(diff, daysLeft) {
+    document.body.classList.remove('is-wedding-week', 'is-wedding-day');
+
+    if (diff <= 0 && Date.now() <= weddingEndDate) {
+      document.body.classList.add('is-wedding-day');
+      if (liveLabel) liveLabel.textContent = 'Hari ini, buka Maps';
+      if (weddingStatusLabel) weddingStatusLabel.textContent = 'Hari ini';
+      if (weddingStatusText) weddingStatusText.textContent = 'Jadwal dan tombol Maps dibuat lebih cepat dijangkau.';
+      return;
+    }
+
+    if (diff < 0) {
+      if (liveLabel) liveLabel.textContent = 'Terima kasih';
+      if (weddingStatusLabel) weddingStatusLabel.textContent = 'Acara selesai';
+      if (weddingStatusText) weddingStatusText.textContent = 'Terima kasih untuk doa dan kehadirannya.';
+      return;
+    }
+
+    if (daysLeft <= 7) {
+      document.body.classList.add('is-wedding-week');
+      if (liveLabel) liveLabel.textContent = 'Minggu ini menuju hari H';
+      if (weddingStatusLabel) weddingStatusLabel.textContent = 'Minggu ini';
+      if (weddingStatusText) weddingStatusText.textContent = 'Simpan tanggal dan cek lokasi sebelum berangkat.';
+      return;
+    }
+
+    if (liveLabel) liveLabel.textContent = 'Hari menuju hari H';
+    if (weddingStatusLabel) weddingStatusLabel.textContent = 'Mendekati hari H';
+    if (weddingStatusText) weddingStatusText.textContent = 'Detail acara dan lokasi sudah siap.';
+  }
 
   function updateCountdown() {
     var now = Date.now();
@@ -809,11 +895,13 @@
 
     if (diff <= 0) {
       cdDays.textContent = '0';
+      setWeddingMode(diff, 0);
       return;
     }
 
-    var d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var d = Math.floor(diff / dayMs);
     cdDays.textContent = String(d);
+    setWeddingMode(diff, d);
   }
 
   updateCountdown();
@@ -920,10 +1008,17 @@
         if (galleryScrollTicking) return;
         galleryScrollTicking = true;
         requestAnimationFrame(function() {
-          var scrollLeft = carousel.scrollLeft;
-          var itemWidth = items[0].offsetWidth + 12; // gap
-          var activeIndex = Math.round(scrollLeft / itemWidth);
-          activeIndex = Math.max(0, Math.min(activeIndex, items.length - 1));
+          var activeIndex = 0;
+          var center = carousel.scrollLeft + carousel.clientWidth / 2;
+          var nearest = Infinity;
+          items.forEach(function(item, i) {
+            var itemCenter = item.offsetLeft + item.offsetWidth / 2;
+            var dist = Math.abs(center - itemCenter);
+            if (dist < nearest) {
+              nearest = dist;
+              activeIndex = i;
+            }
+          });
           dots.forEach(function(dot, i) {
             dot.classList.toggle('active', i === activeIndex);
             if (i === activeIndex) {
