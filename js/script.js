@@ -13,63 +13,24 @@
   // ── Background Music ──
   const bgMusic = document.getElementById('bgMusic');
   const musicToggle = document.getElementById('musicToggle');
-  var musicTargetVolume = 0.42;
-  var musicFadeFrame = null;
-  bgMusic.volume = 0;
-
-  function setMusicButtonState(isPlaying) {
-    musicToggle.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
-    musicToggle.setAttribute('aria-label', isPlaying ? 'Jeda musik' : 'Putar musik');
-    musicToggle.setAttribute('title', isPlaying ? 'Jeda musik' : 'Putar musik');
-  }
-
-  function fadeMusicTo(target, onDone) {
-    if (musicFadeFrame) cancelAnimationFrame(musicFadeFrame);
-    var start = bgMusic.volume;
-    var startTime = null;
-    var duration = prefersReducedMotion ? 1 : 1200;
-
-    function step(ts) {
-      if (!startTime) startTime = ts;
-      var progress = Math.min((ts - startTime) / duration, 1);
-      var eased = 1 - Math.pow(1 - progress, 3);
-      bgMusic.volume = start + (target - start) * eased;
-      if (progress < 1) {
-        musicFadeFrame = requestAnimationFrame(step);
-      } else {
-        bgMusic.volume = target;
-        musicFadeFrame = null;
-        if (onDone) onDone();
-      }
-    }
-
-    musicFadeFrame = requestAnimationFrame(step);
-  }
+  bgMusic.volume = 0.4;
 
   function playMusic() {
-    bgMusic.volume = Math.min(bgMusic.volume, 0.08);
     bgMusic.play().then(function () {
       musicToggle.classList.remove('paused');
       musicToggle.classList.add('playing');
-      setMusicButtonState(true);
-      fadeMusicTo(musicTargetVolume);
     }).catch(function () {
       musicToggle.classList.add('paused');
       musicToggle.classList.remove('playing');
-      setMusicButtonState(false);
+      musicToggle.setAttribute('title', 'Tap untuk putar musik');
     });
   }
 
   function pauseMusic() {
+    bgMusic.pause();
     musicToggle.classList.add('paused');
     musicToggle.classList.remove('playing');
-    setMusicButtonState(false);
-    fadeMusicTo(0, function() {
-      bgMusic.pause();
-    });
   }
-
-  setMusicButtonState(false);
 
   musicToggle.addEventListener('click', function () {
     if (bgMusic.paused) {
@@ -82,18 +43,14 @@
   // ── Guest Name from URL (?to=Nama+Tamu) ──
   var params = new URLSearchParams(window.location.search);
   var guestName = params.get('to');
-  var personalizedGuestName = '';
 
   if (guestName) {
     var decoded = decodeURIComponent(guestName).trim();
     if (decoded) {
-      personalizedGuestName = decoded;
       var guestEl = document.querySelector('.cover__guest-name');
       if (guestEl) guestEl.textContent = decoded;
       var rsvpInput = document.getElementById('rsvp-name');
       if (rsvpInput) rsvpInput.value = decoded;
-      var rsvpPersonalNote = document.getElementById('rsvpPersonalNote');
-      if (rsvpPersonalNote) rsvpPersonalNote.textContent = 'Kami tunggu kabar baiknya, ' + decoded + '.';
     }
   }
 
@@ -145,7 +102,6 @@
   }
 
   function showContent() {
-    document.body.classList.add('invitation-opened');
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.top = '';
@@ -157,31 +113,24 @@
     playMusic();
   }
 
-  var openingStarted = false;
   openBtn.addEventListener('click', function () {
-    if (openingStarted) return;
-    openingStarted = true;
-    openBtn.disabled = true;
-    cover.classList.add('is-opening');
+    // Hide cover, show loading
+    cover.classList.add('hidden');
+    loadingOverlay.classList.add('active');
 
-    setTimeout(function() {
-      cover.classList.add('hidden');
-      loadingOverlay.classList.add('active');
-
-      preloadAssets(
-        function onProgress(pct) {
-          loadingBarFill.style.width = pct + '%';
-        },
-        function onDone() {
-          // Small delay so 100% is visible
-          setTimeout(function () {
-            loadingOverlay.classList.remove('active');
-            loadingOverlay.classList.add('fade-out');
-            showContent();
-          }, 360);
-        }
-      );
-    }, prefersReducedMotion ? 0 : 620);
+    preloadAssets(
+      function onProgress(pct) {
+        loadingBarFill.style.width = pct + '%';
+      },
+      function onDone() {
+        // Small delay so 100% is visible
+        setTimeout(function () {
+          loadingOverlay.classList.remove('active');
+          loadingOverlay.classList.add('fade-out');
+          showContent();
+        }, 400);
+      }
+    );
   });
 
   // Lock scroll until cover is opened (iOS-safe)
@@ -201,54 +150,17 @@
   });
   openBtn.focus();
 
-  // ── Character splitter — wraps each letter in a span for stagger reveal ──
-  function splitToChars(el) {
-    if (!el || el.dataset.charSplit) return;
-    el.dataset.charSplit = '1';
-    var text = el.textContent;
-    el.textContent = '';
-    for (var i = 0; i < text.length; i++) {
-      var ch = text.charAt(i);
-      var span = document.createElement('span');
-      if (ch === ' ') {
-        span.className = 'char-reveal char-reveal--space';
-        span.innerHTML = '&nbsp;';
-      } else {
-        span.className = 'char-reveal';
-        span.textContent = ch;
-      }
-      span.style.transitionDelay = (i * 0.035) + 's';
-      el.appendChild(span);
-    }
-  }
-
-  function revealCharsIn(container) {
-    var chars = container.querySelectorAll('.char-reveal');
-    for (var i = 0; i < chars.length; i++) {
-      chars[i].classList.add('char-reveal--visible');
-    }
-  }
-
   // ── Scroll Reveal ──
   function initReveal() {
-    // Split all section titles into chars first
-    if (!prefersReducedMotion) {
-      document.querySelectorAll('.text-section-title, .hero__header-title').forEach(splitToChars);
-    }
-
     var reveals = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .reveal-scale-up');
     if (!('IntersectionObserver' in window)) {
-      reveals.forEach(function (el) {
-        el.classList.add('visible');
-        revealCharsIn(el);
-      });
+      reveals.forEach(function (el) { el.classList.add('visible'); });
       return;
     }
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          revealCharsIn(entry.target);
           observer.unobserve(entry.target);
         }
       });
@@ -262,42 +174,6 @@
     });
   }
 
-  // ── Cover pointer parallax tilt (desktop only) ──
-  if (!prefersReducedMotion && !isMobile) {
-    var coverContent = cover.querySelector('.cover__content');
-    if (coverContent) {
-      var tiltCurX = 0, tiltCurY = 0, tiltTargetX = 0, tiltTargetY = 0;
-      var tiltRaf = null;
-
-      function tiltLoop() {
-        tiltCurX += (tiltTargetX - tiltCurX) * 0.10;
-        tiltCurY += (tiltTargetY - tiltCurY) * 0.10;
-        coverContent.style.setProperty('--cover-tx', tiltCurX.toFixed(2));
-        coverContent.style.setProperty('--cover-ty', tiltCurY.toFixed(2));
-        if (Math.abs(tiltTargetX - tiltCurX) > 0.05 || Math.abs(tiltTargetY - tiltCurY) > 0.05) {
-          tiltRaf = requestAnimationFrame(tiltLoop);
-        } else {
-          tiltRaf = null;
-        }
-      }
-
-      cover.addEventListener('pointermove', function (e) {
-        var rect = cover.getBoundingClientRect();
-        var cx = rect.width / 2;
-        var cy = rect.height / 2;
-        tiltTargetX = ((e.clientX - rect.left - cx) / cx) * -7;
-        tiltTargetY = ((e.clientY - rect.top - cy) / cy) * -7;
-        if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop);
-      });
-
-      cover.addEventListener('pointerleave', function () {
-        tiltTargetX = 0;
-        tiltTargetY = 0;
-        if (!tiltRaf) tiltRaf = requestAnimationFrame(tiltLoop);
-      });
-    }
-  }
-
   // ── Active Nav Tracking ──
   const sections = document.querySelectorAll('section[id]');
   const navItems = document.querySelectorAll('.floating-nav__item');
@@ -305,51 +181,29 @@
   navItems.forEach(function(item) { navSectionIds.push(item.getAttribute('data-section')); });
   var navUpdateCallbacks = [];
   var lastActiveId = navSectionIds[0] || '';
-  var navSections = [];
-
-  function refreshNavSections() {
-    navSections = [];
-    sections.forEach(function (section) {
-      var id = section.getAttribute('id');
-      if (navSectionIds.indexOf(id) === -1) return;
-      var top = section.offsetTop;
-      navSections.push({
-        id: id,
-        top: top,
-        bottom: top + section.offsetHeight
-      });
-    });
-  }
 
   function updateActiveNav() {
+    var scrollY = window.scrollY + window.innerHeight / 2;
     var currentId = '';
 
-    // Top of page → home active
-    if (window.scrollY < 80) {
-      currentId = navSectionIds[0];
-    } else {
-      // Find nav section closest to scroll position (top quarter of viewport)
-      var probe = window.scrollY + window.innerHeight * 0.28;
-      var bestId = '';
-      var bestDist = Infinity;
-      navSections.forEach(function (section) {
-        if (probe >= section.top && probe < section.bottom) {
-          // probe inside this section — pick immediately
-          bestId = section.id;
-          bestDist = 0;
-        } else if (bestDist > 0) {
-          var dist = Math.min(Math.abs(probe - section.top), Math.abs(probe - section.bottom));
-          if (dist < bestDist) {
-            bestDist = dist;
-            bestId = section.id;
-          }
-        }
-      });
-      currentId = bestId || lastActiveId;
-    }
+    sections.forEach(function (section) {
+      var top = section.offsetTop;
+      var bottom = top + section.offsetHeight;
+      if (scrollY >= top && scrollY < bottom) {
+        currentId = section.getAttribute('id');
+      }
+    });
 
-    if (!currentId || navSectionIds.indexOf(currentId) === -1 || currentId === lastActiveId) return;
-    lastActiveId = currentId;
+    // If current section has no nav item, keep the last active one
+    if (currentId && navSectionIds.indexOf(currentId) === -1) {
+      currentId = lastActiveId;
+    }
+    if (currentId && navSectionIds.indexOf(currentId) !== -1) {
+      lastActiveId = currentId;
+    }
+    if (!currentId) {
+      currentId = lastActiveId;
+    }
 
     navItems.forEach(function (item) {
       item.classList.remove('active');
@@ -362,10 +216,6 @@
   }
 
   // ── Unified Scroll Handler (single rAF for all scroll work) ──
-  refreshNavSections();
-  window.addEventListener('resize', refreshNavSections, { passive: true });
-  window.addEventListener('load', refreshNavSections);
-
   var scrollCallbacks = [];
   var scrollTicking = false;
 
@@ -392,13 +242,6 @@
       e.preventDefault();
       var targetId = this.getAttribute('href').substring(1);
       var target = document.getElementById(targetId);
-
-      // Immediately set active state + move pill (don't wait for scroll)
-      navItems.forEach(function (n) { n.classList.remove('active'); });
-      this.classList.add('active');
-      lastActiveId = this.getAttribute('data-section');
-      navUpdateCallbacks.forEach(function (cb) { cb(); });
-
       if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -431,7 +274,6 @@
   var rsvpForm = document.getElementById('rsvpForm');
   var rsvpSuccess = document.getElementById('rsvpSuccess');
   var rsvpAnother = document.getElementById('rsvpAnother');
-  var rsvpFeedback = document.getElementById('rsvpFeedback');
   var wishesList = document.getElementById('wishesList');
   var wishesEmpty = document.getElementById('wishesEmpty');
   var wishesCount = document.getElementById('wishesCount');
@@ -625,27 +467,9 @@
   }
 
   // ── Show success, hide form ──
-  function showSuccess(name) {
-    var cleanName = name || personalizedGuestName || 'Tamu Undangan';
-    var titleEl = document.getElementById('rsvpSuccessTitle');
-    var descEl = document.getElementById('rsvpSuccessDesc');
-    if (titleEl) titleEl.textContent = 'Terkirim, ' + cleanName + '!';
-    if (descEl) descEl.textContent = 'Terima kasih sudah mengirim konfirmasi. Doa dan kehadiranmu sangat berarti.';
+  function showSuccess() {
     rsvpForm.style.display = 'none';
     rsvpSuccess.style.display = 'block';
-  }
-
-  function setRsvpFeedback(type, message) {
-    if (!rsvpFeedback) return;
-    rsvpFeedback.textContent = message || '';
-    rsvpFeedback.className = 'rsvp__feedback';
-    if (message) {
-      rsvpFeedback.classList.add('is-visible', type === 'success' ? 'is-success' : 'is-error');
-    }
-  }
-
-  function clearRsvpFeedback() {
-    setRsvpFeedback('', '');
   }
 
   // ── Back to form ──
@@ -653,11 +477,6 @@
     rsvpSuccess.style.display = 'none';
     rsvpForm.style.display = 'flex';
     rsvpForm.reset();
-    if (personalizedGuestName) {
-      var namedInput = document.getElementById('rsvp-name');
-      if (namedInput) namedInput.value = personalizedGuestName;
-    }
-    clearRsvpFeedback();
     attendInput.value = 'hadir';
     segmentBtns.forEach(function(b) {
       b.classList.remove('active');
@@ -671,18 +490,6 @@
     }
   });
 
-  var rsvpNameField = document.getElementById('rsvp-name');
-  if (rsvpNameField) {
-    rsvpNameField.addEventListener('input', function() {
-      var errorEl = document.getElementById('rsvpNameError');
-      rsvpNameField.style.outline = '';
-      if (errorEl) {
-        errorEl.classList.remove('rsvp__error--visible');
-      }
-      clearRsvpFeedback();
-    });
-  }
-
   rsvpForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var nameInput = document.getElementById('rsvp-name');
@@ -691,7 +498,6 @@
     var submitText = submitBtn.querySelector('.rsvp__submit-text');
     var name = nameInput.value.trim();
     var message = messageInput.value.trim();
-    clearRsvpFeedback();
 
     if (!name || !attendInput.value) {
       if (!name) {
@@ -701,7 +507,6 @@
           errorEl.textContent = 'Nama wajib diisi';
           errorEl.classList.add('rsvp__error--visible');
         }
-        setRsvpFeedback('error', 'Isi nama dulu supaya konfirmasi bisa dikirim.');
         setTimeout(function() {
           nameInput.style.outline = '';
           if (errorEl) {
@@ -724,23 +529,17 @@
         if (submitText) submitText.textContent = 'Kirim Konfirmasi';
 
         if (!res.ok) {
-          return res.text().then(function(t) {
-            console.error('RSVP error:', res.status, t);
-            setRsvpFeedback('error', 'Maaf, konfirmasi belum terkirim. Coba lagi sebentar ya.');
-          });
+          return res.text().then(function(t) { console.error('RSVP error:', res.status, t); });
         }
 
-        clearRsvpFeedback();
-        showSuccess(name);
+        showSuccess();
         if (message) {
-          showFloatingThankYou();
           loadWishes();
         }
       })
       .catch(function(err) {
         submitBtn.disabled = false;
         if (submitText) submitText.textContent = 'Kirim Konfirmasi';
-        setRsvpFeedback('error', 'Koneksi sedang bermasalah. Coba kirim lagi sebentar ya.');
         console.error('Network error:', err);
       });
   });
@@ -851,43 +650,7 @@
 
   // ── Countdown Timer ──
   var weddingDate = new Date('2026-08-02T07:00:00+07:00').getTime();
-  var weddingEndDate = new Date('2026-08-02T23:59:59+07:00').getTime();
-  var dayMs = 1000 * 60 * 60 * 24;
   var cdDays = document.getElementById('cdDays');
-  var liveLabel = document.querySelector('.live-activity__label');
-  var weddingStatusLabel = document.getElementById('weddingStatusLabel');
-  var weddingStatusText = document.getElementById('weddingStatusText');
-
-  function setWeddingMode(diff, daysLeft) {
-    document.body.classList.remove('is-wedding-week', 'is-wedding-day');
-
-    if (diff <= 0 && Date.now() <= weddingEndDate) {
-      document.body.classList.add('is-wedding-day');
-      if (liveLabel) liveLabel.textContent = 'Hari ini, buka Maps';
-      if (weddingStatusLabel) weddingStatusLabel.textContent = 'Hari ini';
-      if (weddingStatusText) weddingStatusText.textContent = 'Jadwal dan tombol Maps dibuat lebih cepat dijangkau.';
-      return;
-    }
-
-    if (diff < 0) {
-      if (liveLabel) liveLabel.textContent = 'Terima kasih';
-      if (weddingStatusLabel) weddingStatusLabel.textContent = 'Acara selesai';
-      if (weddingStatusText) weddingStatusText.textContent = 'Terima kasih untuk doa dan kehadirannya.';
-      return;
-    }
-
-    if (daysLeft <= 7) {
-      document.body.classList.add('is-wedding-week');
-      if (liveLabel) liveLabel.textContent = 'Minggu ini menuju hari H';
-      if (weddingStatusLabel) weddingStatusLabel.textContent = 'Minggu ini';
-      if (weddingStatusText) weddingStatusText.textContent = 'Simpan tanggal dan cek lokasi sebelum berangkat.';
-      return;
-    }
-
-    if (liveLabel) liveLabel.textContent = 'Hari menuju hari H';
-    if (weddingStatusLabel) weddingStatusLabel.textContent = 'Mendekati hari H';
-    if (weddingStatusText) weddingStatusText.textContent = 'Detail acara dan lokasi sudah siap.';
-  }
 
   function updateCountdown() {
     var now = Date.now();
@@ -895,13 +658,11 @@
 
     if (diff <= 0) {
       cdDays.textContent = '0';
-      setWeddingMode(diff, 0);
       return;
     }
 
-    var d = Math.floor(diff / dayMs);
+    var d = Math.floor(diff / (1000 * 60 * 60 * 24));
     cdDays.textContent = String(d);
-    setWeddingMode(diff, d);
   }
 
   updateCountdown();
@@ -942,6 +703,7 @@
     if (!liveEl || !eventSection) return;
 
     var isVisible = false;
+    var musicToggleEl = document.getElementById('musicToggle');
 
     function checkScroll() {
       var rect = eventSection.getBoundingClientRect();
@@ -950,34 +712,17 @@
         isVisible = true;
         liveEl.classList.add('visible');
         liveEl.classList.remove('hidden');
+        if (musicToggleEl) musicToggleEl.classList.add('shifted');
       } else if (!shouldShow && isVisible) {
         isVisible = false;
         liveEl.classList.remove('visible');
         liveEl.classList.add('hidden');
+        if (musicToggleEl) musicToggleEl.classList.remove('shifted');
       }
     }
 
-    if ('IntersectionObserver' in window) {
-      var liveObserver = new IntersectionObserver(function(entries) {
-        var shouldShow = entries[0] && entries[0].isIntersecting;
-        if (shouldShow && !isVisible) {
-          isVisible = true;
-          liveEl.classList.add('visible');
-          liveEl.classList.remove('hidden');
-        } else if (!shouldShow && isVisible) {
-          isVisible = false;
-          liveEl.classList.remove('visible');
-          liveEl.classList.add('hidden');
-        }
-      }, {
-        threshold: 0,
-        rootMargin: '-50% 0px 0px 0px'
-      });
-      liveObserver.observe(eventSection);
-    } else {
-      scrollCallbacks.push(checkScroll);
-      checkScroll();
-    }
+    scrollCallbacks.push(checkScroll);
+    checkScroll();
   })();
 
   // ── Gallery Lightbox (iOS-style) + Carousel Dots ──
@@ -990,46 +735,48 @@
     // Create page indicator dots
     if (dotsContainer && carousel) {
       items.forEach(function(_, i) {
-        var dot = document.createElement('button');
-        dot.type = 'button';
+        var dot = document.createElement('span');
         dot.className = 'gallery__dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', 'Lihat foto ' + (i + 1));
-        if (i === 0) dot.setAttribute('aria-current', 'true');
-        dot.addEventListener('click', function() {
-          items[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        });
         dotsContainer.appendChild(dot);
       });
 
       var dots = dotsContainer.querySelectorAll('.gallery__dot');
 
-      var galleryScrollTicking = false;
       carousel.addEventListener('scroll', function() {
-        if (galleryScrollTicking) return;
-        galleryScrollTicking = true;
         requestAnimationFrame(function() {
-          var activeIndex = 0;
-          var center = carousel.scrollLeft + carousel.clientWidth / 2;
-          var nearest = Infinity;
-          items.forEach(function(item, i) {
-            var itemCenter = item.offsetLeft + item.offsetWidth / 2;
-            var dist = Math.abs(center - itemCenter);
-            if (dist < nearest) {
-              nearest = dist;
-              activeIndex = i;
-            }
-          });
+          var scrollLeft = carousel.scrollLeft;
+          var itemWidth = items[0].offsetWidth + 12; // gap
+          var activeIndex = Math.round(scrollLeft / itemWidth);
+          activeIndex = Math.max(0, Math.min(activeIndex, items.length - 1));
           dots.forEach(function(dot, i) {
             dot.classList.toggle('active', i === activeIndex);
-            if (i === activeIndex) {
-              dot.setAttribute('aria-current', 'true');
-            } else {
-              dot.removeAttribute('aria-current');
-            }
           });
-          galleryScrollTicking = false;
+          updateNav();
         });
       }, { passive: true });
+    }
+
+    // ── Arrow navigation ──
+    var prevBtn = document.querySelector('.gallery__nav--prev');
+    var nextBtn = document.querySelector('.gallery__nav--next');
+
+    function updateNav() {
+      if (!prevBtn || !nextBtn) return;
+      var maxScroll = carousel.scrollWidth - carousel.clientWidth - 1;
+      prevBtn.hidden = carousel.scrollLeft <= 1;
+      nextBtn.hidden = carousel.scrollLeft >= maxScroll;
+    }
+
+    function scrollByItem(dir) {
+      var itemWidth = items[0].offsetWidth + 12; // gap
+      carousel.scrollBy({ left: dir * itemWidth, behavior: 'smooth' });
+    }
+
+    if (prevBtn && nextBtn && carousel) {
+      prevBtn.addEventListener('click', function() { scrollByItem(-1); });
+      nextBtn.addEventListener('click', function() { scrollByItem(1); });
+      window.addEventListener('resize', updateNav, { passive: true });
+      updateNav();
     }
 
     // Lightbox
@@ -1040,7 +787,6 @@
     overlay.setAttribute('aria-label', 'Galeri foto');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.appendChild(overlay);
-    var lastFocusedEl = null;
 
     var img = document.createElement('img');
     img.className = 'lightbox-img';
@@ -1053,42 +799,22 @@
     closeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
     overlay.appendChild(closeBtn);
 
-    function openLightbox(src, altText) {
+    function openLightbox(src) {
       if (!src) return;
-      lastFocusedEl = document.activeElement;
       img.src = src;
-      img.alt = altText || 'Foto galeri';
       overlay.classList.add('lightbox-overlay--show');
-      overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      requestAnimationFrame(function() { closeBtn.focus(); });
     }
 
     function closeLightbox() {
       overlay.classList.remove('lightbox-overlay--show');
-      overlay.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-      if (lastFocusedEl && lastFocusedEl.focus) {
-        lastFocusedEl.focus();
-      }
     }
 
-    items.forEach(function(item, i) {
-      item.setAttribute('role', 'button');
-      item.setAttribute('tabindex', '0');
-      item.setAttribute('aria-label', 'Buka foto galeri ' + (i + 1));
-
-      function openFromItem() {
+    items.forEach(function(item) {
+      item.addEventListener('click', function() {
         var photo = item.querySelector('img');
-        if (photo) openLightbox(photo.src, photo.alt);
-      }
-
-      item.addEventListener('click', openFromItem);
-      item.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openFromItem();
-        }
+        if (photo) openLightbox(photo.src);
       });
     });
 
@@ -1097,7 +823,7 @@
       if (e.target === overlay) closeLightbox();
     });
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && overlay.classList.contains('lightbox-overlay--show')) closeLightbox();
+      if (e.key === 'Escape') closeLightbox();
     });
   })();
 
@@ -1165,23 +891,14 @@
     if (!carousel || !dotsContainer || !cards.length) return;
 
     cards.forEach(function(_, i) {
-      var dot = document.createElement('button');
-      dot.type = 'button';
+      var dot = document.createElement('span');
       dot.className = 'story__dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Lihat cerita ' + (i + 1));
-      if (i === 0) dot.setAttribute('aria-current', 'true');
-      dot.addEventListener('click', function() {
-        cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      });
       dotsContainer.appendChild(dot);
     });
 
     var dots = dotsContainer.querySelectorAll('.story__dot');
 
-    var storyScrollTicking = false;
     carousel.addEventListener('scroll', function() {
-      if (storyScrollTicking) return;
-      storyScrollTicking = true;
       requestAnimationFrame(function() {
         var scrollLeft = carousel.scrollLeft;
         var itemWidth = cards[0].offsetWidth + 12;
@@ -1189,13 +906,7 @@
         activeIndex = Math.max(0, Math.min(activeIndex, cards.length - 1));
         dots.forEach(function(dot, i) {
           dot.classList.toggle('active', i === activeIndex);
-          if (i === activeIndex) {
-            dot.setAttribute('aria-current', 'true');
-          } else {
-            dot.removeAttribute('aria-current');
-          }
         });
-        storyScrollTicking = false;
       });
     }, { passive: true });
   })();
@@ -1413,12 +1124,10 @@
       });
     }
 
-    if (!isMobile && !prefersReducedMotion) {
-      scrollCallbacks.push(updateTilt);
-    }
+    scrollCallbacks.push(updateTilt);
 
     // Gyroscope tilt on mobile — throttled to ~30fps
-    if (!isMobile && !prefersReducedMotion && window.DeviceOrientationEvent) {
+    if (window.DeviceOrientationEvent) {
       var gyroCards = document.querySelectorAll('.couple-card, .hero__card');
       var lastBeta = 0, lastGamma = 0;
       var gyroRafId = null;

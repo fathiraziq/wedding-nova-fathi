@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#faf6f0">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/favicon.svg">
+  <meta name="theme-color" content="#ece6df">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>The Wedding of Nova & Fathi</title>
@@ -15,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="The Wedding of Nova & Fathi">
   <meta property="og:description" content="You're Invited — Minggu, 02 Agustus 2026">
-  <meta property="og:image" content="https://fathiraziq.github.io/wedding-nova-fathi/assets/images/hero/couple.jpg">
+  <meta property="og:image" content="https://fathiraziq.github.io/wedding-nova-fathi/assets/images/hero/couple.jpg?v=3"> <!-- placeholder: 1084x1354 -->
   <meta property="og:image:width" content="1084">
   <meta property="og:image:height" content="1354">
   <meta property="og:image:type" content="image/jpeg">
@@ -26,13 +24,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The Wedding of Nova & Fathi">
   <meta name="twitter:description" content="You're Invited — Minggu, 02 Agustus 2026">
-  <meta name="twitter:image" content="https://fathiraziq.github.io/wedding-nova-fathi/assets/images/hero/couple.jpg">
+  <meta name="twitter:image" content="https://fathiraziq.github.io/wedding-nova-fathi/assets/images/hero/couple.jpg?v=3"> <!-- placeholder: 1084x1354 -->
   <link rel="dns-prefetch" href="https://roktkjmmdmbglulapzve.supabase.co">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/style.css?v=20260322k">
+  <link rel="stylesheet" href="css/style.css?v=20260530a">
   <noscript><style>.reveal{opacity:1;transform:none;}</style></noscript>
 </head>
 <body>
@@ -49,6 +47,10 @@
        COVER GATE
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="cover" id="cover" role="dialog" aria-modal="true" aria-label="Undangan Pernikahan Nova & Fathi">
+    <!-- Video background -->
+    <video class="cover__video" autoplay muted loop playsinline aria-hidden="true">
+      <source src="assets/bg.webm" type="video/webm">
+    </video>
     <!-- Floating orbs -->
     <div class="cover__orb cover__orb--1" aria-hidden="true"></div>
     <div class="cover__orb cover__orb--2" aria-hidden="true"></div>
@@ -68,39 +70,44 @@
 
     <!-- Vignette -->
     <div class="cover__vignette" aria-hidden="true"></div>
-    <div class="cover__cinema" aria-hidden="true">
-      <span class="cover__cinema-panel cover__cinema-panel--left"></span>
-      <span class="cover__cinema-panel cover__cinema-panel--right"></span>
-      <span class="cover__cinema-line"></span>
-    </div>
 
     <div class="cover__content">
-      <!-- Identity Block -->
-      <p class="cover__subtitle">The Wedding of</p>
-      <h1 class="cover__names">Nova <span class="cover__amp">&amp;</span> Fathi</h1>
-      <p class="cover__date">Minggu, 02 Agustus 2026</p>
 
-      <!-- Guest Notification -->
-      <div class="cover__guest">
-        <p class="cover__guest-label">Kepada Yth.</p>
-        <p class="cover__guest-name">Tamu Undangan</p>
+
+      <!-- Glass Panel -->
+      <div class="cover__panel">
+        <!-- Identity Block -->
+        <p class="cover__subtitle">The Wedding of</p>
+        <h1 class="cover__names">Nova <span class="cover__amp">&amp;</span> Fathi</h1>
+        <p class="cover__date">Minggu, 02 Agustus 2026</p>
+
+        <!-- Divider -->
+        <div class="cover__divider" aria-hidden="true"></div>
+
+        <!-- Guest Notification -->
+        <div class="cover__guest">
+          <p class="cover__guest-label">Kepada Yth.</p>
+          <p class="cover__guest-name">Tamu Undangan</p>
+        </div>
+
+
+
+        <!-- CTA -->
+        <div class="cover__btn-wrap">
+          <button class="cover__btn" id="openInvitation" aria-label="Buka Undangan">
+            <span class="cover__btn-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+            </span>
+            <span class="cover__btn-text">Buka Undangan</span>
+          </button>
+        </div>
       </div>
-
-      <!-- CTA — Envelope -->
-      <button class="cover__cta" id="openInvitation" aria-label="Buka Undangan Nova dan Fathi">
-        <span class="cover__cta-core">
-          <span class="cover__cta-copy">
-            <span class="cover__cta-title">Buka Undangan</span>
-          </span>
-          <span class="cover__cta-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-          </span>
-        </span>
-      </button>
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       MAIN CONTENT
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
   <!-- Loading Overlay -->
   <div class="loading-overlay" id="loadingOverlay" aria-hidden="true">
@@ -113,27 +120,23 @@
     </div>
   </div>
   <main id="mainContent">
+    <video class="main__video-bg" autoplay muted loop playsinline aria-hidden="true">
+      <source src="assets/bg.webm" type="video/webm">
+    </video>
 
     <!-- ══ HERO ══ -->
     <section class="hero" id="home">
       <div class="container">
         <div class="hero__header reveal">
-          <p class="hero__eyebrow">The Wedding of</p>
-          <h2 class="hero__header-title">Nova &amp; Fathi</h2>
-          <p class="hero__lede">Minggu, 02 Agustus 2026</p>
+          <h2 class="hero__header-title">We're Getting Married</h2>
         </div>
 
-        <!-- Photo Card (Editorial Layout) -->
+        <!-- Photo Card -->
         <div class="hero__card reveal reveal-delay-1">
           <div class="hero__card-photo">
-            <img src="assets/images/hero/couple.jpg" alt="Nova & Fathi" loading="eager" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/images/hero/couple.jpg?v=3" alt="Nova & Fathi" loading="eager" fetchpriority="high" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div class="hero__card-overlay"></div>
-          <div class="hero__editorial-meta" aria-hidden="true">
-            <span>N</span>
-            <span>02.08</span>
-            <span>F</span>
-          </div>
           <div class="hero__card-info">
             <div class="hero__card-divider"></div>
             <p class="hero__card-names">Nova &amp; Fathi</p>
@@ -173,7 +176,7 @@
 
 
 
-    <!-- COUPLE / MEMPELAI -->
+    <!-- â”€â”€ COUPLE / MEMPELAI â”€â”€ -->
     <section id="mempelai">
       <div class="container">
         <div class="couple__header reveal">
@@ -183,7 +186,7 @@
         <!-- Mempelai Wanita -->
         <div class="couple-card reveal reveal-delay-1">
           <div class="couple-card__photo">
-            <img src="assets/images/couple/bride.jpeg" alt="Nova" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/images/couple/bride.jpeg?v=3" alt="Nova" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div class="couple-card__overlay"></div>
           <div class="couple-card__info">
@@ -210,11 +213,11 @@
         <!-- Mempelai Pria -->
         <div class="couple-card reveal reveal-delay-2">
           <div class="couple-card__photo">
-            <img src="assets/images/couple/groom.jpeg" alt="Fathi" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+            <img src="assets/images/couple/groom.jpeg?v=3" alt="Fathi" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           </div>
           <div class="couple-card__overlay"></div>
           <div class="couple-card__info">
-            <h3 class="couple-card__name">Fathi Ashari</h3>
+            <h3 class="couple-card__name">Fathi Raziq Ashari</h3>
             <div class="couple-card__divider"></div>
             <div class="couple-card__parents">
               <p>Putra Kedua dari</p>
@@ -284,7 +287,7 @@
             <p class="story-card__desc">Insya Allah, di hari ini kami menyempurnakan separuh agama kami. Sebuah awal baru yang kami tunggu-tunggu, dengan penuh syukur dan harapan.</p>
           </div>
         </div>
-        <div class="story__dots" role="group" aria-label="Navigasi cerita"></div>      </div>    </section>
+        <div class="story__dots" aria-hidden="true"></div>      </div>    </section>
 
 
     <!-- ══ EVENT / ACARA ══ -->
@@ -301,13 +304,6 @@
           <div class="event-card__date-header">
             <span class="event-card__weekday">Minggu</span>
             <span class="event-card__date-full">02 Agustus 2026</span>
-          </div>
-          <div class="event-card__smart" id="weddingDayMode" aria-live="polite">
-            <div class="event-card__smart-copy">
-              <span class="event-card__smart-kicker" id="weddingStatusLabel">Mendekati hari H</span>
-              <span class="event-card__smart-text" id="weddingStatusText">Detail acara dan lokasi sudah siap.</span>
-            </div>
-            <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="event-card__smart-action">Maps</a>
           </div>
 
           <!-- Schedule Group -->
@@ -350,9 +346,13 @@
                   <p class="event-card__venue-name">Masjid At-Taqwa</p>
                   <p class="event-card__venue-address">Jl. Raya Pasar Minggu No.15, RT.2/RW.5, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510</p>
                   <div class="venue-actions">
+                    <button class="map-action-pill" id="copyAddress" data-address="Masjid At-Taqwa, Jl. Raya Pasar Minggu No.15, RT.2/RW.5, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510" aria-label="Salin alamat">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"/></svg>
+                      <span>Salin</span>
+                    </button>
                     <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="map-action-pill">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
-                      <span>Buka di Maps</span>
+                      <span>Rute</span>
                     </a>
                   </div>
                 </div>
@@ -375,33 +375,47 @@
           <h2 class="text-section-title">Our Gallery</h2>
         </div>
 
+        <div class="gallery__viewport">
+        <button class="gallery__nav gallery__nav--prev" aria-label="Sebelumnya">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button class="gallery__nav gallery__nav--next" aria-label="Berikutnya">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
         <div class="gallery__carousel">
           <div class="gallery__item" data-index="0">
-            <img src="assets/images/gallery/adat-01-simpuh.jpg" alt="Nova dan Fathi berbusana adat duduk bersimpuh" loading="lazy">
+            <img src="assets/images/gallery/1.jpg?v=3" alt="Gallery Photo 1" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div class="gallery__item" data-index="1">
-            <img src="assets/images/gallery/jas-01-standing.jpg" alt="Nova dan Fathi berbusana jas berdiri formal" loading="lazy">
+            <img src="assets/images/gallery/2.jpg?v=3" alt="Gallery Photo 2" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div class="gallery__item" data-index="2">
-            <img src="assets/images/gallery/adat-02-keris.jpg" alt="Nova dan Fathi berbusana adat dengan keris" loading="lazy">
+            <img src="assets/images/gallery/3.jpg?v=3" alt="Gallery Photo 3" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div class="gallery__item" data-index="3">
-            <img src="assets/images/gallery/jas-02-close.jpg" alt="Nova dan Fathi berbusana jas dalam potret dekat" loading="lazy">
+            <img src="assets/images/gallery/4.jpg?v=3" alt="Gallery Photo 4" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div class="gallery__item" data-index="4">
-            <img src="assets/images/gallery/adat-03-embrace.jpg" alt="Nova dan Fathi berbusana adat dalam pose hangat" loading="lazy">
+            <img src="assets/images/gallery/5.jpg?v=3" alt="Gallery Photo 5" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div class="gallery__item" data-index="5">
-            <img src="assets/images/gallery/jas-03-seated.jpg" alt="Nova dan Fathi berbusana jas dengan komposisi duduk dan berdiri" loading="lazy">
+            <img src="assets/images/gallery/6.jpg?v=3" alt="Gallery Photo 6" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div class="gallery__item" data-index="6">
-            <img src="assets/images/gallery/adat-04-royal.jpg" alt="Nova dan Fathi berbusana adat dalam pose kerajaan" loading="lazy">
+            <img src="assets/images/gallery/7.jpg?v=3" alt="Gallery Photo 7" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
           <div class="gallery__item" data-index="7">
-            <img src="assets/images/gallery/jas-04-chair.jpg" alt="Nova dan Fathi berbusana jas dalam pose elegan di kursi" loading="lazy">
+            <img src="assets/images/gallery/8.jpg?v=3" alt="Gallery Photo 8" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+          </div>
+          <div class="gallery__item" data-index="8">
+            <img src="assets/images/gallery/9.jpg?v=3" alt="Gallery Photo 9" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+          </div>
+          <div class="gallery__item" data-index="9">
+            <img src="assets/images/gallery/10.jpg?v=3" alt="Gallery Photo 10" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
           </div>
         </div>
-        <div class="gallery__dots" role="group" aria-label="Navigasi galeri"></div>
+        </div>
+        <div class="gallery__dots" aria-hidden="true"></div>
       </div>
     </section>
 
@@ -412,7 +426,6 @@
         <div class="rsvp__header reveal">
           <h2 class="text-section-title">RSVP</h2>
           <p class="text-body" style="margin-top: 16px;">Mohon konfirmasi kehadiran Bapak/Ibu/Saudara/i melalui formulir berikut.</p>
-          <p class="rsvp__personal-note" id="rsvpPersonalNote">Kami tunggu kabar baiknya.</p>
         </div>
 
         <!-- Form wrapped in grouped card -->
@@ -431,7 +444,8 @@
               <div class="rsvp__segment" id="rsvpSegment" role="radiogroup" aria-label="Konfirmasi kehadiran">
                 <div class="rsvp__segment-slider" id="segmentSlider"></div>
                 <button type="button" class="rsvp__segment-btn active" data-value="hadir" role="radio" aria-checked="true">Hadir</button>
-                <button type="button" class="rsvp__segment-btn" data-value="tidak" role="radio" aria-checked="false">Tidak Hadir</button>
+                <button type="button" class="rsvp__segment-btn" data-value="tidak" role="radio" aria-checked="false">Tidak</button>
+                <button type="button" class="rsvp__segment-btn" data-value="ragu" role="radio" aria-checked="false">Ragu</button>
               </div>
             </div>
             <!-- Row: Ucapan -->
@@ -447,23 +461,15 @@
             </span>
             <span class="rsvp__submit-text">Kirim Konfirmasi</span>
           </button>
-          <p class="rsvp__feedback" id="rsvpFeedback" role="status" aria-live="polite"></p>
         </form>
 
         <!-- Success State -->
         <div class="rsvp__success" id="rsvpSuccess" style="display:none;">
-          <div class="rsvp__success-burst" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
           <div class="rsvp__success-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="32" height="32"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
           </div>
-          <p class="rsvp__success-title" id="rsvpSuccessTitle">Terkirim!</p>
-          <p class="rsvp__success-desc" id="rsvpSuccessDesc">Terima kasih atas konfirmasi dan doa Anda.</p>
+          <p class="rsvp__success-title">Terkirim!</p>
+          <p class="rsvp__success-desc">Terima kasih atas konfirmasi dan doa Anda.</p>
           <button class="rsvp__success-btn" id="rsvpAnother">Kirim Ucapan Lagi</button>
         </div>
 
@@ -629,7 +635,7 @@
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
 
-  <audio id="bgMusic" loop preload="metadata">
+  <audio id="bgMusic" loop preload="auto">
     <source src="assets/music/bg-music.mp3" type="audio/mpeg">
   </audio>
 
@@ -660,6 +666,6 @@
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SCRIPTS
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-  <script src="js/script.js?v=20260322h"></script>
+  <script src="js/script.js?v=20260530a"></script>
 </body>
 </html>
