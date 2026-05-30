@@ -2996,11 +2996,10 @@ main section > .container > * {
 
   /* ── Cover Mobile ── */
   .cover {
-    /* Auto 130% forces the height to be 1.3x screen height, creating vertical slack.
-       Center 80% pushes the image upwards, safely cropping the cafe ceiling and moving heads to the top edge */
-    background: 
-      linear-gradient(to bottom, rgba(236,230,223,0) 50%, #ece6df 85%),
-      url('../assets/images/cover/cover.jpg?v=real5') center 80% / auto 130% no-repeat, #ece6df !important;
+    /* Video background tampil di atas; gradient gelap sebagai fallback */
+    background:
+      linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 100%),
+      #1a1a1a !important;
   }
   .cover__panel {
     padding: 28px 20px 24px;
