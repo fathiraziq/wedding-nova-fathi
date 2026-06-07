@@ -688,28 +688,21 @@
   (function initGallery() {
     var carousel = document.querySelector('.gallery__carousel');
     var items = document.querySelectorAll('.gallery__item');
-    var dotsContainer = document.querySelector('.gallery__dots');
+    var curEl = document.getElementById('galCurrent');
+    var totalEl = document.getElementById('galTotal');
     if (!items.length) return;
 
-    // Create page indicator dots
-    if (dotsContainer && carousel) {
-      items.forEach(function(_, i) {
-        var dot = document.createElement('span');
-        dot.className = 'gallery__dot' + (i === 0 ? ' active' : '');
-        dotsContainer.appendChild(dot);
-      });
+    if (totalEl) totalEl.textContent = items.length;
 
-      var dots = dotsContainer.querySelectorAll('.gallery__dot');
-
+    // Counter + nav update on scroll
+    if (carousel) {
       carousel.addEventListener('scroll', function() {
         requestAnimationFrame(function() {
           var scrollLeft = carousel.scrollLeft;
           var itemWidth = items[0].offsetWidth + 12; // gap
           var activeIndex = Math.round(scrollLeft / itemWidth);
           activeIndex = Math.max(0, Math.min(activeIndex, items.length - 1));
-          dots.forEach(function(dot, i) {
-            dot.classList.toggle('active', i === activeIndex);
-          });
+          if (curEl) curEl.textContent = activeIndex + 1;
           updateNav();
         });
       }, { passive: true });

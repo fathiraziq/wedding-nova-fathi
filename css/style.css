@@ -1190,8 +1190,8 @@ main section > .container > * {
 }
 
 .gallery__item {
-  flex: 0 0 72%;
-  aspect-ratio: 3 / 4;
+  flex: 0 0 74%;
+  aspect-ratio: 2 / 3;
   background: var(--glass-bg);
   border: 0.5px solid var(--glass-border);
   backdrop-filter: var(--blur-secondary);
@@ -1240,24 +1240,32 @@ main section > .container > * {
 }
 
 /* Page indicator dots — UIPageControl */
-.gallery__dots {
+/* Counter "1 / 10" — pengganti dots, lebih jelas untuk banyak foto */
+.gallery__counter {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding-top: 8px;
+  gap: 7px;
+  padding-top: 6px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.85);
 }
 
-.gallery__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--gray-300);
-  transition: background 0.25s var(--spring-smooth), transform 0.25s var(--spring-bounce);
+.gallery__counter #galCurrent {
+  color: var(--gold-light);
+  font-weight: 500;
+  min-width: 1.2em;
+  text-align: right;
 }
 
-.gallery__dot.active {
-  background: var(--gold);
-  transform: scale(1.25);
+.gallery__counter-sep {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.gallery__counter #galTotal {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ══════════════════════════════════════
