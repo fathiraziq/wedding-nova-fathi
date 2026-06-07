@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/style.css?v=20260530c">
+  <link rel="stylesheet" href="css/style.css?v=20260530g">
   <noscript><style>.reveal{opacity:1;transform:none;}</style></noscript>
 </head>
 <body>
@@ -254,40 +254,71 @@
         <div class="story__header reveal">
           <h2 class="text-section-title">Love Story</h2>
           <p class="text-body" style="margin-top: 12px;">Perjalanan kami menuju hari yang kami impikan.</p>
+          <p class="story__hint" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+            <span>Ketuk tiap momen untuk membaca cerita</span>
+          </p>
         </div>
 
-        <div class="story-carousel">
-          <div class="story-card">
-            <span class="story-card__year">Juli 2023</span>
-            <h3 class="story-card__title">First Meet</h3>
-            <p class="story-card__desc">Waktu itu cuma kenalan biasa, nggak ada yang spesial. Tapi entah kenapa, namanya terus kepikiran sampai berhari-hari.</p>
-          </div>
+        <div class="story-timeline">
+          <button type="button" class="story-item" aria-expanded="false">
+            <span class="story-item__node" aria-hidden="true"></span>
+            <span class="story-item__head">
+              <span class="story-item__year">2023</span>
+              <span class="story-item__title">First Meet</span>
+              <span class="story-item__chevron" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </span>
+            </span>
+            <span class="story-item__body">
+              <span class="story-item__desc">Di tahun yang sederhana itu, kami dipertemukan tanpa rencana. Pertemuan lucu dan berkesan yang akan kami ingat selalu.</span>
+            </span>
+          </button>
 
-          <div class="story-card">
-            <span class="story-card__year">September 2023</span>
-            <h3 class="story-card__title">Getting Closer</h3>
-            <p class="story-card__desc">Chat yang awalnya basa-basi pelan-pelan jadi obrolan panjang tiap malam. Ternyata banyak hal yang sama — dari selera musik sampai cara pandang hidup.</p>
-          </div>
+          <button type="button" class="story-item" aria-expanded="false">
+            <span class="story-item__node" aria-hidden="true"></span>
+            <span class="story-item__head">
+              <span class="story-item__year">2023</span>
+              <span class="story-item__title">We Found the Rhythm</span>
+              <span class="story-item__chevron" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </span>
+            </span>
+            <span class="story-item__body">
+              <span class="story-item__desc">Seiring waktu, pertemuan itu menumbuhkan rasa dan berkembang menjadi kisah yang kami rawat perlahan dengan satu tujuan yang jelas. Kami menjalani hubungan yang dipenuhi proses belajar dan bertumbuh tentang kepercayaan, pengertian, dan bagaimana saling menjaga. Bukan perjalanan yang selalu mudah, tapi selalu kami perjuangkan dengan keyakinan, bahwa hati yang ditunjukkan untuk menetap akan selalu menemukan jalannya untuk bertahan.</span>
+            </span>
+          </button>
 
-          <div class="story-card">
-            <span class="story-card__year">Oktober 2023</span>
-            <h3 class="story-card__title">It's Official</h3>
-            <p class="story-card__desc">Akhirnya bilang apa yang udah lama dirasain. Alhamdulillah, ternyata perasaannya sama. Dari situ, kami jalan bareng dengan satu tujuan yang jelas.</p>
-          </div>
+          <button type="button" class="story-item" aria-expanded="false">
+            <span class="story-item__node" aria-hidden="true"></span>
+            <span class="story-item__head">
+              <span class="story-item__year">2026</span>
+              <span class="story-item__title">The Proposal</span>
+              <span class="story-item__chevron" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </span>
+            </span>
+            <span class="story-item__body">
+              <span class="story-item__desc">Setelah saling berproses belajar dan bertumbuh, ternyata banyak hal yang sama sampai pandangan hidup juga sama. Akhirnya kami memutuskan untuk melangkah ke jenjang yang lebih serius dengan mempertemukan kedua keluarga besar kami, dengan membawa harapan baru dalam ikatan yang lebih serius. Atas izin Allah SWT dan restu kedua orang tua dan keluarga, kami melangsungkan lamaran pada 26 April 2026.</span>
+            </span>
+          </button>
 
-          <div class="story-card">
-            <span class="story-card__year">April 2026</span>
-            <h3 class="story-card__title">The Proposal</h3>
-            <p class="story-card__desc">Datang ke rumahnya dengan kedua orang tua. Deg-degan, tapi yakin. Alhamdulillah, doa kami dijawab — kedua keluarga merestui.</p>
-          </div>
-
-          <div class="story-card story-card--highlight">
-            <span class="story-card__year">Agustus 2026</span>
-            <h3 class="story-card__title">The Big Day</h3>
-            <p class="story-card__desc">Insya Allah, di hari ini kami menyempurnakan separuh agama kami. Sebuah awal baru yang kami tunggu-tunggu, dengan penuh syukur dan harapan.</p>
-          </div>
+          <button type="button" class="story-item story-item--highlight" aria-expanded="true">
+            <span class="story-item__node" aria-hidden="true"></span>
+            <span class="story-item__head">
+              <span class="story-item__year">2026</span>
+              <span class="story-item__title">The Big Day</span>
+              <span class="story-item__chevron" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </span>
+            </span>
+            <span class="story-item__body">
+              <span class="story-item__desc">Akhirnya, kami melangkah ke hari yang selama ini kami panjatkan dalam doa. Insya Allah, di tanggal 02 Agustus 2026 ini kami menyempurnakan separuh agama kami. Sebuah awal yang kami tunggu-tunggu, dengan penuh syukur dan harapan.</span>
+            </span>
+          </button>
         </div>
-        <div class="story__dots" aria-hidden="true"></div>      </div>    </section>
+      </div>
+    </section>
 
 
     <!-- ══ EVENT / ACARA ══ -->
@@ -345,16 +376,10 @@
                 <div class="event-card__venue-detail">
                   <p class="event-card__venue-name">Masjid At-Taqwa</p>
                   <p class="event-card__venue-address">Jl. Raya Pasar Minggu No.15, RT.2/RW.5, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510</p>
-                  <div class="venue-actions">
-                    <button class="map-action-pill" id="copyAddress" data-address="Masjid At-Taqwa, Jl. Raya Pasar Minggu No.15, RT.2/RW.5, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510" aria-label="Salin alamat">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"/></svg>
-                      <span>Salin</span>
-                    </button>
-                    <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="map-action-pill">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
-                      <span>Rute</span>
-                    </a>
-                  </div>
+                  <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="venue-directions-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+                    <span>Petunjuk Arah</span>
+                  </a>
                 </div>
               </div>
               <!-- Map preview -->
@@ -523,6 +548,27 @@
           </button>
         </div>
 
+        <!-- Bank BRI — Fathi -->
+        <div class="gift-card reveal reveal-delay-2" style="margin-top:16px;">
+          <div class="gift-card__shimmer"></div>
+          <div class="gift-card__header">
+            <div class="gift-card__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg>
+            </div>
+            <div>
+              <p class="gift-card__bank">Bank BRI</p>
+              <p class="gift-card__name">a.n. Fathi Raziq Ashari</p>
+            </div>
+          </div>
+          <div class="gift-card__number">
+            <span>1629 0100 8727 502</span>
+          </div>
+          <button class="gift-card__action" data-copy="162901008727502">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"/></svg>
+            Salin Nomor Rekening
+          </button>
+        </div>
+
       </div>
     </section>
 
@@ -670,6 +716,6 @@
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SCRIPTS
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-  <script src="js/script.js?v=20260530a"></script>
+  <script src="js/script.js?v=20260530e"></script>
 </body>
 </html>

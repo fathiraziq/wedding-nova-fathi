@@ -607,47 +607,6 @@
     }
   })();
 
-  // ── Copy Address Button ──
-  var copyAddrBtn = document.getElementById('copyAddress');
-  if (copyAddrBtn) {
-    copyAddrBtn.addEventListener('click', function() {
-      var address = this.getAttribute('data-address');
-
-      function showCopied() {
-        var label = copyAddrBtn.querySelector('span');
-        var svgEl = copyAddrBtn.querySelector('svg');
-        if (label) label.textContent = 'Tersalin!';
-        if (svgEl) svgEl.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>';
-        setTimeout(function() {
-          if (label) label.textContent = 'Salin';
-          if (svgEl) svgEl.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.75a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"/>';
-        }, 2000);
-      }
-
-      try {
-        navigator.clipboard.writeText(address).then(showCopied).catch(function() {
-          fallbackCopy(address);
-          showCopied();
-        });
-      } catch(e) {
-        fallbackCopy(address);
-        showCopied();
-      }
-
-      function fallbackCopy(text) {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
-    });
-  }
-
   // ── Countdown Timer ──
   var weddingDate = new Date('2026-08-02T07:00:00+07:00').getTime();
   var cdDays = document.getElementById('cdDays');
@@ -883,32 +842,21 @@
     }, 3500);
   }
 
-  // ── Story Carousel Dots ──
-  (function initStoryDots() {
-    var carousel = document.querySelector('.story-carousel');
-    var dotsContainer = document.querySelector('.story__dots');
-    var cards = document.querySelectorAll('.story-card');
-    if (!carousel || !dotsContainer || !cards.length) return;
+  // ── Story Timeline Accordion ──
+  (function initStoryTimeline() {
+    var items = document.querySelectorAll('.story-item');
+    if (!items.length) return;
 
-    cards.forEach(function(_, i) {
-      var dot = document.createElement('span');
-      dot.className = 'story__dot' + (i === 0 ? ' active' : '');
-      dotsContainer.appendChild(dot);
-    });
-
-    var dots = dotsContainer.querySelectorAll('.story__dot');
-
-    carousel.addEventListener('scroll', function() {
-      requestAnimationFrame(function() {
-        var scrollLeft = carousel.scrollLeft;
-        var itemWidth = cards[0].offsetWidth + 12;
-        var activeIndex = Math.round(scrollLeft / itemWidth);
-        activeIndex = Math.max(0, Math.min(activeIndex, cards.length - 1));
-        dots.forEach(function(dot, i) {
-          dot.classList.toggle('active', i === activeIndex);
+    items.forEach(function(item) {
+      item.addEventListener('click', function() {
+        var isOpen = item.getAttribute('aria-expanded') === 'true';
+        // Tutup semua, lalu buka yang diklik (kalau sebelumnya tertutup)
+        items.forEach(function(other) {
+          other.setAttribute('aria-expanded', 'false');
         });
+        item.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
       });
-    }, { passive: true });
+    });
   })();
 
   // ── Parallax Floating Orbs (disabled on mobile for performance) ──
