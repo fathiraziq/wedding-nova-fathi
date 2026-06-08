@@ -314,7 +314,7 @@
     wishesEmpty.style.display = 'none';
     wishesList.innerHTML = '';
 
-    var toShow = allWishes.slice(0, wishesShown);
+    var toShow = allWishes;
     toShow.forEach(function(w, i) {
       var bubble = document.createElement('div');
       bubble.className = 'wish-bubble';
@@ -331,14 +331,9 @@
       wishesList.appendChild(bubble);
     });
 
-    if (wishesShown < total) {
-      wishesMore.style.display = 'block';
-      wishesMore.textContent = 'Lihat ' + Math.min(5, total - wishesShown) + ' ucapan lainnya';
-      wishesCollapse.style.display = wishesShown > 3 ? 'block' : 'none';
-    } else {
-      wishesMore.style.display = 'none';
-      wishesCollapse.style.display = total > 3 ? 'block' : 'none';
-    }
+    // Kotak ucapan tinggi tetap + scroll internal — tidak perlu tombol load more
+    wishesMore.style.display = 'none';
+    wishesCollapse.style.display = 'none';
   }
 
   wishesMore.addEventListener('click', function() {
