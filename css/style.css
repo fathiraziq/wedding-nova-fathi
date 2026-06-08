@@ -1065,6 +1065,12 @@ main section > .container > * {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Matikan shadow global pada teks (span) di dalam tombol emas */
+.venue-directions-btn span,
+.venue-directions-btn svg {
+  text-shadow: none;
+}
+
 .venue-directions-btn svg {
   width: 18px;
   height: 18px;
