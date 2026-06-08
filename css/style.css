@@ -70,12 +70,12 @@ html {
     0 0 0 0.5px rgba(255, 255, 255, 0.35),
     0 4px 8px rgba(0, 0, 0, 0.04),
     0 8px 24px rgba(0, 0, 0, 0.06);
-  --glass-inner: 
-    inset 0 1px 0 rgba(255, 255, 255, 0.75),
-    inset 0 -0.5px 0 rgba(0, 0, 0, 0.04);
-  --glass-inner-strong: 
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+  --glass-inner:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.10);
+  --glass-inner-strong:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 4px rgba(0, 0, 0, 0.14);
   --glass-inner-btn:
     inset 0 1px 0 rgba(255, 255, 255, 0.85),
     inset 0 -1px 0 rgba(0, 0, 0, 0.03),
@@ -256,8 +256,12 @@ main > section {
 
 /* ── App-like Section Panels — iOS 26 Liquid Glass ── */
 main section > .container {
-  background: rgba(26, 19, 13, 0.40);
-  border: 0.5px solid rgba(255, 255, 255, 0.22);
+  background-color: rgba(26, 19, 13, 0.40);
+  /* #1 Noise grain halus — pecah banding, kesan frosted premium */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  background-repeat: repeat;
+  border: 0.5px solid transparent;
   backdrop-filter: blur(40px) saturate(1.7) brightness(1.05);
   -webkit-backdrop-filter: blur(40px) saturate(1.7) brightness(1.05);
   border-radius: var(--radius-container);
@@ -270,12 +274,28 @@ main section > .container {
   overflow: hidden;
 }
 
+/* #3 Border refraksi cahaya — gradient terang(kiri-atas)->redup(kanan-bawah) ala iOS 26 */
+main section > .container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 0.7px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.12) 35%, rgba(255,255,255,0.03) 65%, rgba(255,255,255,0.22) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
 /* iOS 26 Liquid Glass tint overlay — gradient sheen on glass panels */
 main section > .container::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: 
+  background:
     linear-gradient(160deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 20%, transparent 45%, rgba(255,255,255,0.04) 100%);
   pointer-events: none;
   z-index: 0;
