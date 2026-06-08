@@ -380,9 +380,8 @@
 
   function moveSlider(activeBtn) {
     if (!segmentSlider || !activeBtn) return;
-    var pad = 3;
     var targetW = activeBtn.offsetWidth;
-    var targetX = activeBtn.offsetLeft - pad;
+    var targetX = activeBtn.offsetLeft;
 
     // If first move (no width yet), just snap
     if (!segmentSlider._currentX && segmentSlider._currentX !== 0) {
@@ -462,8 +461,27 @@
   });
 
   var defaultActiveBtn = document.querySelector('.rsvp__segment-btn.active');
+  function snapSliderToActive() {
+    var active = document.querySelector('.rsvp__segment-btn.active');
+    if (!active || !active.offsetWidth) return;
+    // reset agar moveSlider melakukan snap (bukan animasi) dengan ukuran terbaru
+    segmentSlider._currentX = undefined;
+    segmentSlider._currentW = undefined;
+    moveSlider(active);
+  }
   if (defaultActiveBtn) {
-    requestAnimationFrame(function() { moveSlider(defaultActiveBtn); });
+    requestAnimationFrame(snapSliderToActive);
+    // Re-measure saat segment benar-benar terlihat (hindari ukuran stale saat tersembunyi)
+    if ('IntersectionObserver' in window) {
+      var segEl = document.getElementById('rsvpSegment');
+      if (segEl) {
+        var segObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) { if (e.isIntersecting) { snapSliderToActive(); } });
+        }, { threshold: 0.5 });
+        segObs.observe(segEl);
+      }
+    }
+    window.addEventListener('load', snapSliderToActive);
   }
 
   // ── Show success, hide form ──

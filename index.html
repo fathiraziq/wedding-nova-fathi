@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"></noscript>
-  <link rel="stylesheet" href="css/style.css?v=20260530h">
+  <link rel="stylesheet" href="css/style.css?v=20260530j">
   <noscript><style>.reveal{opacity:1;transform:none;}</style></noscript>
 </head>
 <body>
@@ -378,12 +378,12 @@
                 <div class="event-card__venue-detail">
                   <p class="event-card__venue-name">Masjid At-Taqwa</p>
                   <p class="event-card__venue-address">Jl. Raya Pasar Minggu No.15, RT.2/RW.5, Pejaten Bar., Ps. Minggu, Jakarta Selatan 12510</p>
-                  <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="venue-directions-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
-                    <span>Petunjuk Arah</span>
-                  </a>
                 </div>
               </div>
+              <a href="https://maps.google.com/maps?q=Masjid+Raya+At-Taqwa+Pasar+Minggu+Jakarta+Selatan" target="_blank" rel="noopener noreferrer" class="venue-directions-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+                <span>Petunjuk Arah</span>
+              </a>
               <!-- Map preview -->
               <div class="event-card__map">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.5!2d106.8427465!3d-6.2773093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f241c4d5a123%3A0x4b3e9b88f2b7cc1c!2sMasjid%20Raya%20At-Taqwa!5e0!3m2!1sid!2sid!4v1700000000000" title="Peta lokasi Masjid At-Taqwa" width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -461,7 +461,7 @@
             <!-- Row: Nama -->
             <div class="rsvp__row rsvp__row--float">
               <input type="text" id="rsvp-name" class="rsvp__row-input" placeholder=" " required autocomplete="name">
-              <label for="rsvp-name" class="rsvp__float-label">Nama lengkap</label>
+              <label for="rsvp-name" class="rsvp__float-label">Nama</label>
               <span class="rsvp__error" id="rsvpNameError" role="alert" aria-live="polite"></span>
             </div>
             <!-- Row: Kehadiran -->
@@ -470,9 +470,8 @@
               <input type="hidden" id="rsvp-attend" value="hadir">
               <div class="rsvp__segment" id="rsvpSegment" role="radiogroup" aria-label="Konfirmasi kehadiran">
                 <div class="rsvp__segment-slider" id="segmentSlider"></div>
-                <button type="button" class="rsvp__segment-btn active" data-value="hadir" role="radio" aria-checked="true">Hadir</button>
+                <button type="button" class="rsvp__segment-btn active" data-value="hadir" role="radio" aria-checked="true">Ya</button>
                 <button type="button" class="rsvp__segment-btn" data-value="tidak" role="radio" aria-checked="false">Tidak</button>
-                <button type="button" class="rsvp__segment-btn" data-value="ragu" role="radio" aria-checked="false">Ragu</button>
               </div>
             </div>
             <!-- Row: Ucapan -->
@@ -718,6 +717,6 @@
   <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        SCRIPTS
   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-  <script src="js/script.js?v=20260530h"></script>
+  <script src="js/script.js?v=20260530j"></script>
 </body>
 </html>
