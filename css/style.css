@@ -254,11 +254,7 @@ main > section {
 
 /* ── App-like Section Panels — iOS 26 Liquid Glass ── */
 main section > .container {
-  background-color: rgba(26, 19, 13, 0.40);
-  /* #1 Noise grain halus — pecah banding, kesan frosted premium */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch' result='t'/%3E%3CfeColorMatrix in='t' type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 120px 120px;
-  background-repeat: repeat;
+  background: rgba(26, 19, 13, 0.40);
   border: 0.5px solid transparent;
   backdrop-filter: blur(40px) saturate(1.7) brightness(1.05);
   -webkit-backdrop-filter: blur(40px) saturate(1.7) brightness(1.05);
@@ -272,8 +268,22 @@ main section > .container {
   overflow: hidden;
 }
 
-/* #3 Border refraksi cahaya — gradient terang(kiri-atas)->redup(kanan-bawah) ala iOS 26 */
-main section > .container::before {
+/* Border refraksi cahaya — gradient terang(kiri-atas)->redup(kanan-bawah) ala iOS 26 Liquid Glass.
+   Diterapkan ke SEMUA permukaan kaca: panel, kartu, tombol, nav. */
+main section > .container::before,
+.cover__panel::before,
+.gallery__item::before,
+.rsvp__grouped-card::before,
+.story-item::before,
+.floating-nav::before,
+.music-toggle::before,
+.live-activity__inner::before,
+.gallery__nav::before,
+.rsvp__segment::before,
+.event-card::after,
+.gift-card::after,
+.rsvp__submit::after,
+.cover__btn::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -285,7 +295,7 @@ main section > .container::before {
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
 }
 
 /* iOS 26 Liquid Glass tint overlay — gradient sheen on glass panels */
@@ -599,6 +609,7 @@ main section > .container > * {
 }
 
 .live-activity__inner {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0;
