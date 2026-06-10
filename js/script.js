@@ -280,7 +280,7 @@
   var wishesMore = document.getElementById('wishesMore');
   var wishesCollapse = document.getElementById('wishesCollapse');
   var allWishes = [];
-  var wishesShown = 3;
+  var wishesExpanded = false; // tampilkan 2 dulu, sisanya di-load
 
   function getInitials(name) {
     return name.split(' ').map(function(w) { return w[0]; }).slice(0, 2).join('');
@@ -314,7 +314,7 @@
     wishesEmpty.style.display = 'none';
     wishesList.innerHTML = '';
 
-    var toShow = allWishes;
+    var toShow = wishesExpanded ? allWishes : allWishes.slice(0, 2);
     toShow.forEach(function(w, i) {
       var bubble = document.createElement('div');
       bubble.className = 'wish-bubble';
@@ -331,18 +331,24 @@
       wishesList.appendChild(bubble);
     });
 
-    // Kotak ucapan tinggi tetap + scroll internal — tidak perlu tombol load more
-    wishesMore.style.display = 'none';
-    wishesCollapse.style.display = 'none';
+    // 2 ucapan teratas tampil; sisanya dimuat ke kotak scroll internal
+    if (!wishesExpanded && total > 2) {
+      wishesMore.style.display = 'block';
+      wishesMore.textContent = 'Muat semua ' + total + ' ucapan';
+      wishesCollapse.style.display = 'none';
+    } else {
+      wishesMore.style.display = 'none';
+      wishesCollapse.style.display = (wishesExpanded && total > 2) ? 'block' : 'none';
+    }
   }
 
   wishesMore.addEventListener('click', function() {
-    wishesShown = Math.min(wishesShown + 5, allWishes.length);
+    wishesExpanded = true;
     renderWishes();
   });
 
   wishesCollapse.addEventListener('click', function() {
-    wishesShown = 3;
+    wishesExpanded = false;
     renderWishes();
     var section = document.querySelector('.wishes');
     if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
