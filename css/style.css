@@ -1726,12 +1726,9 @@ main section > .container > * {
   max-height: 360px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 6px;
+  padding: 4px 6px 0 2px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
-  /* Fade lembut di tepi atas & bawah (kesan chat berlanjut) */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
