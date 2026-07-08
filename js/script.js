@@ -49,8 +49,6 @@
     if (decoded) {
       var guestEl = document.querySelector('.cover__guest-name');
       if (guestEl) guestEl.textContent = decoded;
-      var rsvpInput = document.getElementById('rsvp-name');
-      if (rsvpInput) rsvpInput.value = decoded;
     }
   }
 

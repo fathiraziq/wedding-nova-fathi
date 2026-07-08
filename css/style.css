@@ -1881,27 +1881,9 @@ main section > .container > * {
   z-index: 0;
 }
 
-/* Holographic shimmer that follows scroll */
+/* Shimmer dimatikan — biar seragam liquid glass dengan kartu lain */
 .gift-card__shimmer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.35) 45%,
-    rgba(255, 255, 255, 0.55) 50%,
-    rgba(255, 255, 255, 0.35) 55%,
-    transparent 70%
-  );
-  background-size: 200% 100%;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.gift-card.visible .gift-card__shimmer {
-  opacity: 1;
+  display: none;
 }
 
 .gift-card + .gift-card {
