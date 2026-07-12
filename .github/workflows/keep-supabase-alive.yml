@@ -1,0 +1,18 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # Setiap 3 hari sekali, jam 03:00 UTC (10:00 WIB)
+    - cron: '0 3 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          curl -sf "https://roktkjmmdmbglulapzve.supabase.co/rest/v1/rsvp?select=id&limit=1" \
+            -H "apikey: sb_publishable_V9TVlG-_pnpFSeqRx6B4RQ_nBGyi5GE" \
+            -H "Authorization: Bearer sb_publishable_V9TVlG-_pnpFSeqRx6B4RQ_nBGyi5GE" \
+            -o /dev/null -w "Supabase ping status: %{http_code}\n"
