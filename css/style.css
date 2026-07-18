@@ -1718,30 +1718,12 @@ main section > .container > * {
   color: var(--gray-400);
 }
 
-/* Chat container */
+/* Chat container — tampil inline (tanpa scroll internal) agar tidak menjebak scroll halaman */
 .wishes__chat {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 360px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 4px 6px 0 2px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-}
-
-.wishes__chat::-webkit-scrollbar {
-  width: 5px;
-}
-.wishes__chat::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.22);
-  border-radius: 10px;
-}
-.wishes__chat::-webkit-scrollbar-track {
-  background: transparent;
+  padding: 4px 2px 0;
 }
 
 .wishes__empty {
